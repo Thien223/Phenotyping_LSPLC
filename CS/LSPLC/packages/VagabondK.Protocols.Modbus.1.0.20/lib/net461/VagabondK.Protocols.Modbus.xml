@@ -1,0 +1,3346 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VagabondK.Protocols.Modbus</name>
+    </assembly>
+    <members>
+        <member name="T:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2">
+            <summary>
+            Modbus 데이터 블록 인터페이스
+            </summary>
+            <typeparam name="TData">데이터 형식</typeparam>
+            <typeparam name="TRawData">Raw 데이터 형식</typeparam>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.StartAddress">
+            <summary>
+            시작 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.EndAddress">
+            <summary>
+            끝 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.Count">
+            <summary>
+            개수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.RawData">
+            <summary>
+            Raw 데이터
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.NumberOfUnit">
+            <summary>
+            단위 데이터 당 Raw 데이터 개수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.IModbusDataBlock`2.Item(System.UInt16)">
+            <summary>
+            특정 주소의 데이터 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>데이터</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.ModbusBooleans">
+            <summary>
+            논리값 Modbus 데이터셋
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusBooleans.GetEnumerator">
+            <summary>
+            데이터셋 열거자 가져오기
+            </summary>
+            <returns>데이터셋 열거</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusBooleans.Allocate(System.UInt16,System.Boolean[])">
+            <summary>
+            주소 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="data">데이터 배열</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusBooleans.AllocateRepeat(System.UInt16,System.UInt16,System.Boolean)">
+            <summary>
+            반복 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="count">개수</param>
+            <param name="value">반복할 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusBooleans.AllocateAll(System.Boolean)">
+            <summary>
+            전체 주소 할당
+            </summary>
+            <param name="value">전체 주소에 할당할 값</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2">
+            <summary>
+            Modbus 데이터셋
+            </summary>
+            <typeparam name="TData">데이터 형식</typeparam>
+            <typeparam name="TRawData">Raw 데이터 형식</typeparam>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.#ctor">
+            <summary>
+            생성자
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.DataBlocks">
+            <summary>
+            데이터 블록 목록
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.AutoAllocation">
+            <summary>
+            자동 주소 할당 여부
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.Item(System.UInt16)">
+            <summary>
+            특정 주소의 데이터 가져오기
+            </summary>
+            <param name="address">데이터 주소</param>
+            <returns>데이터</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.GetData(System.UInt16,System.UInt16)">
+            <summary>
+            연속 데이터 가져오기
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="dataCount">데이터 개수</param>
+            <returns>연속 데이터 열거</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.SetData(System.UInt16,`0[])">
+            <summary>
+            연속 데이터 설정하기
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="values">데이터 배열</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.Remove(System.UInt16,System.UInt16)">
+            <summary>
+            연속 데이터 삭제하기
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="count">개수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusDataSet`2.GetEnumerator">
+            <summary>
+            데이터셋 열거자 가져오기
+            </summary>
+            <returns>데이터셋 열거</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.ModbusEndian">
+            <summary>
+            Modbus 엔디안
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.#ctor(System.Boolean)">
+            <summary>
+            생성자
+            </summary>
+            <param name="isBigEndian">전체 빅 엔디안 여부</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.#ctor(System.Boolean,System.Boolean)">
+            <summary>
+            생성자
+            </summary>
+            <param name="innerBigEndian">레지스터 내부 빅 엔디안 여부</param>
+            <param name="outerBigEndian">레지스터 단위 빅 엔디안 여부</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.ModbusEndian.InnerBigEndian">
+            <summary>
+            레지스터 내부 빅 엔디안 여부
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.Data.ModbusEndian.OuterBigEndian">
+            <summary>
+            레지스터 단위 빅 엔디안 여부
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.ToString">
+            <summary>
+            이 인스턴스의 정규화된 형식 이름을 반환합니다.
+            </summary>
+            <returns>정규화된 형식 이름입니다.</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.op_Equality(VagabondK.Protocols.Modbus.Data.ModbusEndian,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            ModbusEndian의 지정된 두 인스턴스가 같은지를 확인합니다.
+            </summary>
+            <param name="endian1">비교할 첫 번째 개체입니다.</param>
+            <param name="endian2">비교할 두 번째 개체입니다.</param>
+            <returns>endian1 및 endian2가 동일하면 true이고, 그렇지 않으면 false입니다.</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.op_Inequality(VagabondK.Protocols.Modbus.Data.ModbusEndian,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            ModbusEndian의 지정된 두 인스턴스가 다른지를 확인합니다.
+            </summary>
+            <param name="endian1">비교할 첫 번째 개체입니다.</param>
+            <param name="endian2">비교할 두 번째 개체입니다.</param>
+            <returns>endian1 및 endian2가 동일하지 않으면 true이고, 그렇지 않으면 false입니다.</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.Equals(System.Object)">
+            <summary>
+            이 인스턴스와 지정된 개체가 같은지 여부를 나타냅니다.
+            </summary>
+            <param name="obj">현재 인스턴스와 비교할 개체입니다.</param>
+            <returns>true와 이 인스턴스가 동일한 형식이고 동일한 값을 나타내면 obj이고, 그렇지 않으면 false입니다.</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.GetHashCode">
+            <summary>
+            이 인스턴스의 해시 코드를 반환합니다.
+            </summary>
+            <returns>이 인스턴스의 해시 코드인 32비트 부호 있는 정수입니다.</returns>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.Data.ModbusEndian.AllBig">
+            <summary>
+            전체 빅 엔디안
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.Data.ModbusEndian.AllLittle">
+            <summary>
+            전체 리틀 엔디안
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.Reverse">
+            <summary>
+            엔디안 반전하기
+            </summary>
+            <returns>반전된 엔디안</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusEndian.Sort(System.Byte[])">
+            <summary>
+            현재 엔디안으로 정렬
+            </summary>
+            <param name="bytes">바이트 배열</param>
+            <returns>정렬된 바이트 배열</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.ModbusRegisters">
+            <summary>
+            Modbus 레지스터(2 바이트) 데이터셋
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetEnumerator">
+            <summary>
+            데이터셋 열거자 가져오기
+            </summary>
+            <returns>데이터셋 열거</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Byte[])">
+            <summary>
+            Raw 데이터 기반 주소 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="bytes">Raw 데이터 배열</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt16[])">
+            <summary>
+            레지스터(2 바이트) 기반 주소 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="values">레지스터 데이터 배열</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.AllocateRepeatRawData(System.UInt16,System.Int32,System.Byte)">
+            <summary>
+            Raw 데이터 기반 반복 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="rawDataCount">Raw 데이터 개수</param>
+            <param name="value">반복할 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.AllocateRepeat(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            레지스터(2 바이트) 기반 반복 할당
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="registerCount">레지스터 개수</param>
+            <param name="value">반복할 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.AllocateAllRawData(System.Byte)">
+            <summary>
+            Raw 데이터 전체 주소 할당
+            </summary>
+            <param name="value">전체 주소에 할당할 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.AllocateAll(System.UInt16)">
+            <summary>
+            레지스터(2 바이트) 기반 전체 주소 할당
+            </summary>
+            <param name="value">전체 주소에 할당할 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetRawData(System.UInt16,System.Int32)">
+            <summary>
+            연속 Raw 데이터 가져오기
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="rawDataCount">Raw 데이터 개수</param>
+            <returns>Raw 데이터 열거</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetRawData(System.UInt16,System.Byte[])">
+            <summary>
+            연속 Raw 데이터 설정하기
+            </summary>
+            <param name="startAddress">시작 주소</param>
+            <param name="bytes">Raw 데이터 배열</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int16)">
+            <summary>
+            특정 주소에 부호 있는 2바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt16)">
+            <summary>
+            특정 주소에 부호 없는 2바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int32)">
+            <summary>
+            특정 주소에 부호 있는 4바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt32)">
+            <summary>
+            특정 주소에 부호 없는 4바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int64)">
+            <summary>
+            특정 주소에 부호 있는 8바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt64)">
+            <summary>
+            특정 주소에 부호 없는 8바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Single)">
+            <summary>
+            특정 주소에 4바이트 실수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Double)">
+            <summary>
+            특정 주소에 8바이트 실수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt16(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt16(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt32(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt32(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt64(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt64(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetSingle(System.UInt16)">
+            <summary>
+            특정 주소로부터 4바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetDouble(System.UInt16)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int16)">
+            <summary>
+            특정 주소에 부호 있는 2바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt16)">
+            <summary>
+            특정 주소에 부호 없는 2바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int32)">
+            <summary>
+            특정 주소에 부호 있는 4바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt32)">
+            <summary>
+            특정 주소에 부호 없는 4바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int64)">
+            <summary>
+            특정 주소에 부호 있는 8바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt64)">
+            <summary>
+            특정 주소에 부호 없는 8바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Single)">
+            <summary>
+            특정 주소에 4바이트 실수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Double)">
+            <summary>
+            특정 주소에 8바이트 실수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 2바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 2바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 4바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 4바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Int64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 8바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.UInt64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 8바이트 정수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Single,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 4바이트 실수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.Allocate(System.UInt16,System.Double,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 8바이트 실수 값 할당
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt16(System.UInt16,System.Boolean)">
+            <summary>
+            특정 주소로부터 부호 있는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt16(System.UInt16,System.Boolean)">
+            <summary>
+            특정 주소로부터 부호 없는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt32(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 있는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt32(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 없는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetInt64(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 있는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetUInt64(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 없는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetSingle(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.GetDouble(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 2바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 2바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 4바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 4바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Int64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 있는 8바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.UInt64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 부호 없는 8바이트 정수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Single,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 4바이트 실수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.ModbusRegisters.SetValue(System.UInt16,System.Double,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소에 8바이트 실수 값 설정
+            (자동 할당 설정이 되어있지 않으면서 미리 할당된 주소가 아니면 오류 발생)
+            </summary>
+            <param name="address">주소</param>
+            <param name="value">값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.PropertyExtensions">
+            <summary>
+            속성 관련 확장 메서드 모음
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.PropertyExtensions.Get``1(System.Object,``0@,System.Func{``0})">
+            <summary>
+            속성 가져오기. null일 경우 초기화 동작의 결과를 반환. Lazy와 비슷함.
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="factory">속성 초기화 동작</param>
+            <returns>속성 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.PropertyExtensions.Set``1(System.Object,``0@,``0)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.PropertyExtensions.Set``1(System.ComponentModel.INotifyPropertyChanged,``0@,``0,System.ComponentModel.PropertyChangedEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangedEvent">PropertyChanged 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.PropertyExtensions.Set``1(System.ComponentModel.INotifyPropertyChanging,``0@,``0,System.ComponentModel.PropertyChangingEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangingEvent">PropertyChanging 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Data.PropertyExtensions.Set``2(``0,``1@,``1,System.ComponentModel.PropertyChangingEventHandler,System.ComponentModel.PropertyChangedEventHandler,System.String)">
+            <summary>
+            속성 설정
+            </summary>
+            <typeparam name="TObject">속성을 포함한 객체 형식. INotifyPropertyChanged, INotifyPropertyChanging를 구현해야 함.</typeparam>
+            <typeparam name="TProperty">속성 형식</typeparam>
+            <param name="obj">속성을 포함한 객체</param>
+            <param name="target">속성 저장 멤버</param>
+            <param name="value">설정 값</param>
+            <param name="propertyChangingEvent">PropertyChanging 이벤트</param>
+            <param name="propertyChangedEvent">PropertyChanged 이벤트</param>
+            <param name="propertyName">속성 명</param>
+            <returns>값 변경 여부</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Data.NamespaceDoc">
+            <summary>
+            Modbus 라이브러리의 데이터 처리 관련 기능들을 제공합니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusObjectType">
+            <summary>
+            Modbus Object 형식
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusObjectType.InputRegister">
+            <summary>
+            Input Register
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusObjectType.DiscreteInput">
+            <summary>
+            Discrete Input
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusObjectType.HoldingRegister">
+            <summary>
+            Holding Register
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusObjectType.Coil">
+            <summary>
+            Coil
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusFunction">
+            <summary>
+            Modbus Function
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.ReadCoils">
+            <summary>
+            Read Coils
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.ReadDiscreteInputs">
+            <summary>
+            Read Discrete Inputs
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.ReadHoldingRegisters">
+            <summary>
+            Read Holding Registers
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.ReadInputRegisters">
+            <summary>
+            Read Input Registers
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.WriteSingleCoil">
+            <summary>
+            Write Single Coil
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.WriteSingleHoldingRegister">
+            <summary>
+            Write Single Holding Register
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.WriteMultipleCoils">
+            <summary>
+            Write Multiple Coils
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusFunction.WriteMultipleHoldingRegisters">
+            <summary>
+            Write Multiple Holding Registers
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusExceptionCode">
+            <summary>
+            Modbus Exception 코드. 각 코드별 주석은 https://en.wikipedia.org/wiki/Modbus 에서 발췌.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.NotDefined">
+            <summary>
+            Not Defined
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.IllegalFunction">
+            <summary>
+            Function code received in the query is not recognized or allowed by slave.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.IllegalDataAddress">
+            <summary>
+            Data address of some or all the required entities are not allowed or do not exist in slave.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.IllegalDataValue">
+            <summary>
+            Value is not accepted by slave.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.SlaveDeviceFailure">
+            <summary>
+            Unrecoverable error occurred while slave was attempting to perform requested action.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.Acknowledge">
+            <summary>
+            Slave has accepted request and is processing it, but a long duration of time is required. 
+            This response is returned to prevent a timeout error from occurring in the master. 
+            Master can next issue a Poll Program Complete message to determine whether processing is completed.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.SlaveDeviceBusy">
+            <summary>
+            Slave is engaged in processing a long-duration command. Master should retry later.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.NegativeAcknowledge">
+            <summary>
+            Slave cannot perform the programming functions. Master should request diagnostic or error information from slave.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.MemoryParityError">
+            <summary>
+            Slave detected a parity error in memory. Master can retry the request, but service may be required on the slave device.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.GatewayPathUnavailable">
+            <summary>
+            Specialized for Modbus gateways. Indicates a misconfigured gateway.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusExceptionCode.GatewayTargetDeviceFailedToRespond">
+            <summary>
+            Specialized for Modbus gateways. Sent when slave fails to respond.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusCommErrorCode">
+            <summary>
+            Modbus 통신 오류 코드
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.NotDefined">
+            <summary>
+            Not Defined
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseSlaveAddressDoNotMatch">
+            <summary>
+            요청과 응답의 Slave Address가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseFunctionDoNotMatch">
+            <summary>
+            요청과 응답의 Function 코드가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseAddressDoNotMatch">
+            <summary>
+            요청과 응답의 Address가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseLengthDoNotMatch">
+            <summary>
+            요청과 응답의 데이터 길이가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseWritedValueDoNotMatch">
+            <summary>
+            요청과 응답의 쓰기 값이 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseWritedLengthDoNotMatch">
+            <summary>
+            요청과 응답의 다중 쓰기 길이가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ModbusTcpSymbolError">
+            <summary>
+            Modbus TCP 프로토콜 아이디가 0이 아님.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseTcpLengthDoNotMatch">
+            <summary>
+            Modbus TCP 헤더에 표시된 길이와 Modbus 메시지의 길이가 일치하지 않음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseAsciiStartError">
+            <summary>
+            Modbus ASCII의 시작 문자(:)를 찾을 수 없음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseAsciiEndError">
+            <summary>
+            Modbus ASCII의 종결 문자(CR LF)를 찾을 수 없음.
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ErrorCRC">
+            <summary>
+            CRC 오류
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ErrorLRC">
+            <summary>
+            LRC 오류
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.ResponseTimeout">
+            <summary>
+            응답 타임아웃
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusCommErrorCode.NotDefinedModbusSerializer">
+            <summary>
+            Modbus 직렬화 형식이 정의되지 않았음.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusMessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.None">
+            <summary>
+            없음
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.All">
+            <summary>
+            모든 카테고리
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ModbusMessage">
+            <summary>
+            Modbus 메시지 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.Response">
+            <summary>
+            Modbus 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseRead">
+            <summary>
+            Modbus 읽기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWrite">
+            <summary>
+            Modbus 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.Request">
+            <summary>
+            Modbus 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestRead">
+            <summary>
+            Modbus 읽기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWrite">
+            <summary>
+            Modbus 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.Error">
+            <summary>
+            오류 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseReadCoil">
+            <summary>
+            Modbus Coil 읽기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseReadDiscreteInput">
+            <summary>
+            Modbus Discrete Input 읽기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseReadInputRegister">
+            <summary>
+            Modbus Input Register 읽기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseReadHoldingRegister">
+            <summary>
+            Modbus Holding Register 읽기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteCoil">
+            <summary>
+            Modbus Coil 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteSingleCoil">
+            <summary>
+            Modbus Coil 한 개 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteMultiCoil">
+            <summary>
+            Modbus Coil 여러 개 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteHoldingRegister">
+            <summary>
+            Modbus Holding Register 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteSingleHoldingRegister">
+            <summary>
+            Modbus Holding Register 한 개 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseWriteMultiHoldingRegister">
+            <summary>
+            Modbus Holding Register 여러 개 쓰기 응답 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestReadCoil">
+            <summary>
+            Modbus Coil 읽기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestReadDiscreteInput">
+            <summary>
+            Modbus Discrete Input 읽기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestReadInputRegister">
+            <summary>
+            Modbus Input Register 읽기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestReadHoldingRegister">
+            <summary>
+            Modbus Holding Register 읽기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteCoil">
+            <summary>
+            Modbus Coil 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteSingleCoil">
+            <summary>
+            Modbus Coil 한 개 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteMultiCoil">
+            <summary>
+            Modbus Coil 여러 개 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteHoldingRegister">
+            <summary>
+            Modbus Holding Register 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteSingleHoldingRegister">
+            <summary>
+            Modbus Holding Register 한 개 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.RequestWriteMultiHoldingRegister">
+            <summary>
+            Modbus Holding Register 여러 개 쓰기 요청 Log
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.CommError">
+            <summary>
+            통신 오류
+            </summary>
+        </member>
+        <member name="F:VagabondK.Protocols.Modbus.ModbusMessageCategory.ResponseException">
+            <summary>
+            Modbus Exception 코드 수신 오류
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.IModbusMessage">
+            <summary>
+            Modbus 메시지
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.IModbusMessage.TransactionID">
+            <summary>
+            트랜잭션 ID (Modbus TCP에서 사용)
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.IModbusMessage.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.IModbusMessage.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusException">
+            <summary>
+            Modbus Exception 코드 기반 예외
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusException.#ctor(VagabondK.Protocols.Modbus.ModbusExceptionCode)">
+            <summary>
+            생성자
+            </summary>
+            <param name="code">Modbus Exception 코드</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusException.#ctor(VagabondK.Protocols.Modbus.ModbusExceptionCode,System.Exception)">
+            <summary>
+            생성자
+            </summary>
+            <param name="code">Modbus Exception 코드</param>
+            <param name="innerException">내부 예외</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusMaster">
+            <summary>
+            Modbus 마스터
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.#ctor">
+            <summary>
+            생성자
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.#ctor(VagabondK.Protocols.Channels.IChannel)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.#ctor(VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.#ctor(VagabondK.Protocols.Channels.IChannel,VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Dispose">
+            <summary>
+            리소스 해제
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusMaster.Serializer">
+            <summary>
+            Modbus Serializer
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusMaster.Channel">
+            <summary>
+            통신 채널
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusMaster.Timeout">
+            <summary>
+            응답 제한시간(밀리초)
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusMaster.ThrowsModbusExceptions">
+            <summary>
+            Modbus Exception에 대한 예외 발생 여부
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Request(VagabondK.Protocols.Modbus.ModbusRequest)">
+            <summary>
+            Modbus 요청하기
+            </summary>
+            <param name="request">Modbus 요청</param>
+            <returns>Modbus 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Request(VagabondK.Protocols.Modbus.ModbusRequest,System.Int32)">
+            <summary>
+            Modbus 요청하기
+            </summary>
+            <param name="request">Modbus 요청</param>
+            <param name="timeout">응답 제한시간(밀리초)</param>
+            <returns>Modbus 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadCoils(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Coil 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Modbus 논리값 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDiscreteInputs(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Discrete Input 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Modbus 논리값 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegisters(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Holding Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Modbus 레지스터 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegisters(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Input Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Modbus 레지스터 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegisterBytes(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Holding Register를 Raw 바이트 배열로 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Holding Register들의 Raw 바이트 배열</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegisterBytes(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            다중 Input Register를 Raw 바이트 배열로 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <returns>Input Register들의 Raw 바이트 배열</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteCoils(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            다중 Coil 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">보낼 Coil 값 목록</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegisters(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.UInt16})">
+            <summary>
+            다중 Holding Register 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">보낼 Holding Register 값 목록</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegisterBytes(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            다중 Holding Register를 Raw 바이트 배열로 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="bytes">보낼 Holding Register 값들의 Raw 바이트 목록</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadCoil(System.Byte,System.UInt16)">
+            <summary>
+            단일 Coil 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Coil 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDiscreteInput(System.Byte,System.UInt16)">
+            <summary>
+            단일 Discrete Input 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Discrete Input 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegister(System.Byte,System.UInt16)">
+            <summary>
+            단일 Holding Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegister(System.Byte,System.UInt16)">
+            <summary>
+            단일 Input Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteCoil(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            단일 Coil 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">보낼 Coil 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegister(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            단일 Holding Register 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">보낼 Holding Register 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromInputRegisters(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            Input Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>Input Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromInputRegisters(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            Input Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>Input Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Input Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Input Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromInputRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Input Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Input Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            Holding Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>Holding Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            Holding Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>Holding Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            Holding Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <returns>Holding Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromHoldingRegisters(System.Byte,System.UInt16)">
+            <summary>
+            Holding Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <returns>Holding Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int16,System.Boolean)">
+            <summary>
+            부호 있는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt16,System.Boolean)">
+            <summary>
+            부호 없는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            부호 있는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt32,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            부호 없는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            부호 있는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt64,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            부호 없는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Single,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            4바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Double,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            8바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int16)">
+            <summary>
+            부호 있는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            부호 없는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            부호 있는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt32)">
+            <summary>
+            부호 없는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int64)">
+            <summary>
+            부호 있는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt64)">
+            <summary>
+            부호 없는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Single)">
+            <summary>
+            4바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Double)">
+            <summary>
+            8바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadCoils(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Coil 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Modbus 논리값 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDiscreteInputs(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Discrete Input 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Modbus 논리값 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegisters(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Holding Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Modbus 레지스터 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegisters(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Input Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Modbus 레지스터 읽기 응답</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegisterBytes(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Holding Register를 Raw 바이트 배열로 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register들의 Raw 바이트 배열</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegisterBytes(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            다중 Input Register를 Raw 바이트 배열로 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">길이</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register들의 Raw 바이트 배열</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteCoils(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Boolean},System.Int32)">
+            <summary>
+            다중 Coil 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">보낼 Coil 값 목록</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegisters(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.UInt16},System.Int32)">
+            <summary>
+            다중 Holding Register 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">보낼 Holding Register 값 목록</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegisterBytes(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Byte},System.Int32)">
+            <summary>
+            다중 Holding Register를 Raw 바이트 배열로 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="bytes">보낼 Holding Register 값들의 Raw 바이트 목록</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadCoil(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            단일 Coil 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Coil 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDiscreteInput(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            단일 Discrete Input 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Discrete Input 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadHoldingRegister(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            단일 Holding Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInputRegister(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            단일 Input Register 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteCoil(System.Byte,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            단일 Coil 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">보낼 Coil 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.WriteHoldingRegister(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            단일 Holding Register 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">보낼 Holding Register 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromInputRegisters(System.Byte,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromInputRegisters(System.Byte,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromInputRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Input Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromInputRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Input Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Input Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromHoldingRegisters(System.Byte,System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            Holding Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt16FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 2바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 2바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt32FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt32FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 4바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 4바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadInt64FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 있는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 있는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadUInt64FromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 부호 없는 8바이트 정수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 부호 없는 8바이트 정수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadSingleFromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 4바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 4바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.ReadDoubleFromHoldingRegisters(System.Byte,System.UInt16,System.Int32)">
+            <summary>
+            Holding Register에서 8바이트 실수 값 읽기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="timeout">제한시간(밀리초)</param>
+            <returns>Holding Register의 8바이트 실수 값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int16,System.Boolean,System.Int32)">
+            <summary>
+            부호 있는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt16,System.Boolean,System.Int32)">
+            <summary>
+            부호 없는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int32,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            부호 있는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt32,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            부호 없는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int64,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            부호 있는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt64,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            부호 없는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Single,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            4바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Double,VagabondK.Protocols.Modbus.Data.ModbusEndian,System.Int32)">
+            <summary>
+            8바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="endian">엔디안</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int16,System.Int32)">
+            <summary>
+            부호 있는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt16,System.Int32)">
+            <summary>
+            부호 없는 2바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int32,System.Int32)">
+            <summary>
+            부호 있는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt32,System.Int32)">
+            <summary>
+            부호 없는 4바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Int64,System.Int32)">
+            <summary>
+            부호 있는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.UInt64,System.Int32)">
+            <summary>
+            부호 없는 8바이트 정수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Single,System.Int32)">
+            <summary>
+            4바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusMaster.Write(System.Byte,System.UInt16,System.Double,System.Int32)">
+            <summary>
+            8바이트 실수 값 쓰기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">쓸 값</param>
+            <param name="timeout">제한시간(밀리초)</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusRequest">
+            <summary>
+            Modbus 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusRequest.#ctor(System.Byte,VagabondK.Protocols.Modbus.ModbusFunction,System.UInt16)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="function">Function</param>
+            <param name="address">데이터 주소</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.ObjectType">
+            <summary>
+            Modbus Object 형식
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.SlaveAddress">
+            <summary>
+            슬레이브 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.Function">
+            <summary>
+            Function
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.Address">
+            <summary>
+            데이터 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.Length">
+            <summary>
+            요청 길이
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusRequest.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 결과 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.TransactionID">
+            <summary>
+            트랜잭션 ID (Modbus TCP에서 사용)
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusRequest.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusReadRequest">
+            <summary>
+            Modbus 읽기 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRequest.#ctor(System.Byte,VagabondK.Protocols.Modbus.ModbusObjectType,System.UInt16,System.UInt16)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="objectType">Modbus Object 형식</param>
+            <param name="address">데이터 주소</param>
+            <param name="length">요청 길이</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRequest.ObjectType">
+            <summary>
+            Modbus Object 형식
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRequest.Length">
+            <summary>
+            요청 길이
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRequest.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 결과 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRequest.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusWriteRequest">
+            <summary>
+            Modbus 쓰기 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteRequest.#ctor(System.Byte,VagabondK.Protocols.Modbus.ModbusFunction,System.UInt16)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="function">Function</param>
+            <param name="address">데이터 주소</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest">
+            <summary>
+            Modbus Coil 쓰기 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.#ctor(System.Byte,System.UInt16)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.#ctor(System.Byte,System.UInt16,System.Boolean)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">Coil 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.#ctor(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">Coil 값 목록</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.SingleBooleanValue">
+            <summary>
+            단일 논리값
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.Values">
+            <summary>
+            다중 논리값 목록
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.Length">
+            <summary>
+            길이
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.ObjectType">
+            <summary>
+            Modbus Object 형식
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 결과 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteCoilRequest.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest">
+            <summary>
+            Modbus Holding Register 쓰기 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.#ctor(System.Byte,System.UInt16,System.UInt16)">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="value">Holding Register 값</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.#ctor(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="bytes">Holding Register 값들의 Raw 바이트 목록</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.#ctor(System.Byte,System.UInt16,System.Collections.Generic.IEnumerable{System.UInt16})">
+            <summary>
+            생성자
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="address">데이터 주소</param>
+            <param name="values">Holding Register 값 목록</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.SingleRegisterValue">
+            <summary>
+            단일 Holding Register 값
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.Bytes">
+            <summary>
+            Holding Register 값들의 Raw 바이트 목록
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.Length">
+            <summary>
+            길이
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.ObjectType">
+            <summary>
+            Modbus Object 형식
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 결과 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteHoldingRegisterRequest.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusResponse">
+            <summary>
+            Modbus 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusResponse.#ctor(VagabondK.Protocols.Modbus.ModbusRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="request">Modbus 요청</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusResponse.Request">
+            <summary>
+            Modbus 요청
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusResponse.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusResponse.TransactionID">
+            <summary>
+            트랜잭션 ID (Modbus TCP에서 사용)
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusResponse.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusOkResponse">
+            <summary>
+            Modbus 정상 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusOkResponse.#ctor(VagabondK.Protocols.Modbus.ModbusRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="request">Modbus 요청</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusExceptionResponse">
+            <summary>
+            Modbus Exception 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusExceptionResponse.#ctor(VagabondK.Protocols.Modbus.ModbusExceptionCode,VagabondK.Protocols.Modbus.ModbusRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="exceptionCode">Modbus Exception 코드</param>
+            <param name="request">Modbus 요청</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusExceptionResponse.ExceptionCode">
+            <summary>
+            Modbus Exception 코드
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusExceptionResponse.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusExceptionResponse.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusOkResponse`1">
+            <summary>
+            Modbus 정상 응답
+            </summary>
+            <typeparam name="TRequest">Modbus 요청 형식</typeparam>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusOkResponse`1.#ctor(`0)">
+            <summary>
+            생성자
+            </summary>
+            <param name="request">Modbus 요청</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusReadResponse">
+            <summary>
+            Modbus 읽기 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadResponse.#ctor(VagabondK.Protocols.Modbus.ModbusReadRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="request">Modbus 읽기 요청</param>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusReadBooleanResponse">
+            <summary>
+            Modbus 논리값 읽기 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadBooleanResponse.#ctor(System.Boolean[],VagabondK.Protocols.Modbus.ModbusReadRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="values">응답할 논리값 배열</param>
+            <param name="request">Modbus 읽기 요청</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadBooleanResponse.Values">
+            <summary>
+            응답 논리값 목록
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadBooleanResponse.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadBooleanResponse.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse">
+            <summary>
+            Modbus 레지스터 읽기 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.#ctor(System.Byte[],VagabondK.Protocols.Modbus.ModbusReadRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="bytes">응답할 레지스터들의 Raw 바이트 배열</param>
+            <param name="request">Modbus 읽기 요청</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.Bytes">
+            <summary>
+            응답 레지스터들의 Raw 바이트 배열
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.Values">
+            <summary>
+            응답 레지스터 배열
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt16(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt16(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt32(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt32(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt64(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 있는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt64(System.UInt16)">
+            <summary>
+            특정 주소로부터 부호 없는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetSingle(System.UInt16)">
+            <summary>
+            특정 주소로부터 4바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetDouble(System.UInt16)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt16(System.UInt16,System.Boolean)">
+            <summary>
+            특정 주소로부터 부호 있는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt16(System.UInt16,System.Boolean)">
+            <summary>
+            특정 주소로부터 부호 없는 2바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="isBigEndian">빅 엔디안 여부</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt32(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 있는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt32(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 없는 4바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetInt64(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 있는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetUInt64(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 부호 없는 8바이트 정수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetSingle(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusReadRegisterResponse.GetDouble(System.UInt16,VagabondK.Protocols.Modbus.Data.ModbusEndian)">
+            <summary>
+            특정 주소로부터 8바이트 실수 값 가져오기
+            </summary>
+            <param name="address">주소</param>
+            <param name="endian">엔디안</param>
+            <returns>값</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusWriteResponse">
+            <summary>
+            Modbus 쓰기에 대한 응답
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteResponse.#ctor(VagabondK.Protocols.Modbus.ModbusWriteRequest)">
+            <summary>
+            생성자
+            </summary>
+            <param name="request">Modbus 읽기 요청</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusWriteResponse.Serialize">
+            <summary>
+            직렬화
+            </summary>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusWriteResponse.MessageCategory">
+            <summary>
+            Modbus 메시지 카테고리
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusSlave">
+            <summary>
+            Modbus 슬레이브
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlave.Coils">
+            <summary>
+            Coils
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlave.DiscreteInputs">
+            <summary>
+            Discrete Inputs
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlave.HoldingRegisters">
+            <summary>
+            Holding Registers
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlave.InputRegisters">
+            <summary>
+            Input Registers
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlave.PropertyChanged">
+            <summary>
+            속성 값이 변경될 때 발생합니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ModbusSlaveService">
+            <summary>
+            Modbus 슬레이브 서비스
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor">
+            <summary>
+            생성자
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor(VagabondK.Protocols.Channels.IChannel)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor(System.Collections.Generic.IEnumerable{VagabondK.Protocols.Channels.IChannel})">
+            <summary>
+            생성자
+            </summary>
+            <param name="channels">통신 채널 목록</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor(VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor(VagabondK.Protocols.Channels.IChannel,VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.#ctor(System.Collections.Generic.IEnumerable{VagabondK.Protocols.Channels.IChannel},VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channels">통신 채널 목록</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.Item(System.Byte)">
+            <summary>
+            Modbus 슬레이브 가져오기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <returns>Modbus 슬레이브</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.SlaveAddresses">
+            <summary>
+            슬레이브 주소 목록
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.ModbusSlaves">
+            <summary>
+            Modbus 슬레이브 목록
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.ContainsSlaveAddress(System.Byte)">
+            <summary>
+            슬레이브 주소 포함 여부
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <returns>Modbus 슬레이브 주소 포함 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.Contains(VagabondK.Protocols.Modbus.ModbusSlave)">
+            <summary>
+            Modbus 슬레이브 포함 여부
+            </summary>
+            <param name="modbusSlave">Modbus 슬레이브</param>
+            <returns>Modbus 슬레이브 포함 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.SlaveAddressOf(VagabondK.Protocols.Modbus.ModbusSlave)">
+            <summary>
+            슬레이브 주소 검색
+            </summary>
+            <param name="modbusSlave">Modbus 슬레이브</param>
+            <returns>슬레이브 주소</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.TryGetModbusSlave(System.Byte,VagabondK.Protocols.Modbus.ModbusSlave@)">
+            <summary>
+            Modbus 슬레이브 가져오기
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <param name="modbusSlave">Modbus 슬레이브</param>
+            <returns>Modbus 슬레이브 포함 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.Remove(System.Byte)">
+            <summary>
+            Modbus 슬레이브 제거
+            </summary>
+            <param name="slaveAddress">슬레이브 주소</param>
+            <returns>제거 여부</returns>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.Serializer">
+            <summary>
+            Modbus Serializer
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.ChannelTimeout">
+            <summary>
+            채널 유지 제한시간(밀리세컨드 단위). 이 시간 동안 요청이 발생하지 않으면 채널을 닫습니다. 기본값은 10000(10초)이고, 0이면 채널을 항상 유지합니다.
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ModbusSlaveService.Channels">
+            <summary>
+            통신 채널 목록
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.AddChannel(VagabondK.Protocols.Channels.IChannel)">
+            <summary>
+            통신 채널 추가
+            </summary>
+            <param name="channel">통신 채널</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.RemoveChannel(VagabondK.Protocols.Channels.IChannel)">
+            <summary>
+            통신 채널 제거
+            </summary>
+            <param name="channel">통신 채널</param>
+            <returns>제거 여부</returns>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.Dispose">
+            <summary>
+            리소스 해제
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnReceivedModbusRequest(VagabondK.Protocols.Channels.Channel,VagabondK.Protocols.Modbus.ModbusRequest)">
+            <summary>
+            Modbus 요청 수신 처리
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="request">Modbus 요청</param>
+            <returns>Modbus 응답</returns>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.ValidatingSlaveAddress">
+            <summary>
+            슬레이브 주소 검증 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedReadCoils">
+            <summary>
+            Coil 읽기 요청 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedReadDiscreteInputs">
+            <summary>
+            Discrete Input 읽기 요청 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedReadHoldingRegisters">
+            <summary>
+            Holding Register 읽기 요청 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedReadInputRegisters">
+            <summary>
+            Input Register 읽기 요청 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedWriteCoil">
+            <summary>
+            Coil 쓰기 요청 이벤트
+            </summary>
+        </member>
+        <member name="E:VagabondK.Protocols.Modbus.ModbusSlaveService.RequestedWriteHoldingRegister">
+            <summary>
+            Holding Register 쓰기 요청 이벤트
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnValidatingSlaveAddress(VagabondK.Protocols.Modbus.ValidatingSlaveAddressEventArgs)">
+            <summary>
+            슬레이브 주소 검증
+            </summary>
+            <param name="e">슬레이브 주소 검증 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedReadCoils(VagabondK.Protocols.Modbus.RequestedReadBooleanEventArgs)">
+            <summary>
+            Coil 읽기 요청 처리
+            </summary>
+            <param name="e">Coil 읽기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedReadDiscreteInputs(VagabondK.Protocols.Modbus.RequestedReadBooleanEventArgs)">
+            <summary>
+            Discrete Input 읽기 요청 처리
+            </summary>
+            <param name="e">Discrete Input 읽기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedReadHoldingRegisters(VagabondK.Protocols.Modbus.RequestedReadRegisterEventArgs)">
+            <summary>
+            Holding Register 읽기 요청 처리
+            </summary>
+            <param name="e">Holding Register 읽기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedReadInputRegisters(VagabondK.Protocols.Modbus.RequestedReadRegisterEventArgs)">
+            <summary>
+            Input Register 읽기 요청 처리
+            </summary>
+            <param name="e">Input Register 읽기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedWriteCoil(VagabondK.Protocols.Modbus.RequestedWriteCoilEventArgs)">
+            <summary>
+            Coil 쓰기 요청 처리
+            </summary>
+            <param name="e">Coil 쓰기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.OnRequestedWriteHoldingRegister(VagabondK.Protocols.Modbus.RequestedWriteHoldingRegisterEventArgs)">
+            <summary>
+            Holding Register 쓰기 요청 처리
+            </summary>
+            <param name="e">Holding Register 쓰기 요청 발생 이벤트 매개변수</param>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.ModbusSlaveService.GetEnumerator">
+            <summary>
+            Modbus 슬레이브 목록 열거
+            </summary>
+            <returns>Modbus 슬레이브 목록 열거</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.ValidatingSlaveAddressEventArgs">
+            <summary>
+            슬레이브 주소 검증 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ValidatingSlaveAddressEventArgs.SlaveAddress">
+            <summary>
+            슬레이브 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ValidatingSlaveAddressEventArgs.Channel">
+            <summary>
+            통신 채널
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.ValidatingSlaveAddressEventArgs.IsValid">
+            <summary>
+            유효한 슬레이브 주소 여부
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.RequestedEventArgs">
+            <summary>
+            Modbus 요청 발생 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedEventArgs.SlaveAddress">
+            <summary>
+            슬레이브 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedEventArgs.Function">
+            <summary>
+            Function
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedEventArgs.Address">
+            <summary>
+            데이터 주소
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedEventArgs.Channel">
+            <summary>
+            통신 채널
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedEventArgs.Succeed">
+            <summary>
+            요청 처리 성공 여부
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.RequestedReadBooleanEventArgs">
+            <summary>
+            논리값(Coil, Discrete Input) 읽기 요청 발생 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedReadBooleanEventArgs.Length">
+            <summary>
+            요청 길이
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedReadBooleanEventArgs.Values">
+            <summary>
+            응답할 논리값(Coil, Discrete Input) 목록
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.RequestedReadRegisterEventArgs">
+            <summary>
+            레지스터(Holding, Input) 읽기 요청 발생 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedReadRegisterEventArgs.Length">
+            <summary>
+            요청 길이
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedReadRegisterEventArgs.Bytes">
+            <summary>
+            응답할 레지스터(Holding, Input)의 Raw 바이트 목록
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.RequestedWriteCoilEventArgs">
+            <summary>
+            Coil 쓰기 요청 발생 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedWriteCoilEventArgs.Values">
+            <summary>
+            받은 논리값(Coil, Discrete Input) 목록
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.RequestedWriteHoldingRegisterEventArgs">
+            <summary>
+            Holding Register 쓰기 요청 발생 이벤트 매개변수
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedWriteHoldingRegisterEventArgs.Bytes">
+            <summary>
+            받은 레지스터(Holding, Input)의 Raw 바이트 목록
+            </summary>
+        </member>
+        <member name="P:VagabondK.Protocols.Modbus.RequestedWriteHoldingRegisterEventArgs.Registers">
+            <summary>
+            받은 레지스터(Holding, Input) 목록
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.NamespaceGroupDoc">
+            <summary>
+            Modbus 관련 기능을 모아놓은 라이브러리입니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.NamespaceDoc">
+            <summary>
+            Modbus 라이브러리에서 기본적으로 사용되는 프로그래밍 요소들이 포함되어 있습니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Serialization.NamespaceDoc">
+            <summary>
+            Modbus 라이브러리의 통신 프레임 직렬화 관련 기능들을 제공합니다. Modbus RTU, Modbus TCP, Modbus ASCII를 지원합니다.
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Serialization.ModbusAsciiSerializer">
+            <summary>
+            Modbus ASCII Serializer
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Serialization.ModbusRtuSerializer">
+            <summary>
+            Modbus RTU Serializer
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Serialization.ModbusSerializer">
+            <summary>
+            Modbus Serializer
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Modbus.Serialization.ModbusSerializer.Serialize(VagabondK.Protocols.Modbus.IModbusMessage)">
+            <summary>
+            Modbus 메시지 직렬화
+            </summary>
+            <param name="message">Modbus 메시지</param>
+            <returns>직렬화 된 바이트 열거</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Modbus.Serialization.ModbusTcpSerializer">
+            <summary>
+            Modbus TCP Serializer
+            </summary>
+        </member>
+        <member name="T:VagabondK.Protocols.Logging.ModbusExceptionLog">
+            <summary>
+            Modbus Exception Log
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusExceptionLog.#ctor(VagabondK.Protocols.Channels.IChannel,VagabondK.Protocols.Modbus.ModbusExceptionResponse,System.Byte[],VagabondK.Protocols.Logging.ChannelRequestLog,VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="message">응답 메시지 인스턴스</param>
+            <param name="rawMessage">원본 메시지</param>
+            <param name="requestLog">관련 요청 메시지에 대한 Log</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Logging.ModbusExceptionLog.ExceptionCode">
+            <summary>
+            Modbus Exception 코드
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusExceptionLog.ToString">
+            <summary>
+            이 인스턴스의 정규화된 형식 이름을 반환합니다.
+            </summary>
+            <returns>정규화된 형식 이름입니다.</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Logging.ModbusRequestLog">
+            <summary>
+            통신 채널을 통해 주고 받은 Modbus 요청 메시지에 대한 Log
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusRequestLog.#ctor(VagabondK.Protocols.Channels.IChannel,VagabondK.Protocols.Modbus.ModbusRequest,System.Byte[],VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="request">요청 메시지 인스턴스</param>
+            <param name="rawMessage">원본 메시지</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Logging.ModbusRequestLog.ModbusRequest">
+            <summary>
+            Modbus 요청 메시지
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusRequestLog.ToString">
+            <summary>
+            이 인스턴스의 정규화된 형식 이름을 반환합니다.
+            </summary>
+            <returns>정규화된 형식 이름입니다.</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Logging.ModbusResponseLog">
+            <summary>
+            통신 채널을 통해 주고 받은 Modbus 응답 메시지에 대한 Log
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusResponseLog.#ctor(VagabondK.Protocols.Channels.IChannel,VagabondK.Protocols.Modbus.ModbusResponse,System.Byte[],VagabondK.Protocols.Logging.ModbusRequestLog,VagabondK.Protocols.Modbus.Serialization.ModbusSerializer)">
+            <summary>
+            생성자
+            </summary>
+            <param name="channel">통신 채널</param>
+            <param name="response">응답 메시지 인스턴스</param>
+            <param name="rawMessage">원본 메시지</param>
+            <param name="requestLog">관련 요청 메시지에 대한 Log</param>
+            <param name="serializer">Modbus Serializer</param>
+        </member>
+        <member name="P:VagabondK.Protocols.Logging.ModbusResponseLog.ModbusResponse">
+            <summary>
+            Modbus 응답 메시지
+            </summary>
+        </member>
+        <member name="M:VagabondK.Protocols.Logging.ModbusResponseLog.ToString">
+            <summary>
+            이 인스턴스의 정규화된 형식 이름을 반환합니다.
+            </summary>
+            <returns>정규화된 형식 이름입니다.</returns>
+        </member>
+        <member name="T:VagabondK.Protocols.Logging.NamespaceDoc">
+            <summary>
+            여러 프로토콜들의 통신 채널 로깅 관련 기능들을 제공합니다.
+            </summary>
+        </member>
+    </members>
+</doc>
