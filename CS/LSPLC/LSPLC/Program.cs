@@ -47,20 +47,20 @@ namespace LSPLC
             //    Console.WriteLine($"변수: {item.Key}, 값: {item.Value.WordValue}");
 
             Log log = new Log("Main");
-            PLCDevice device = new PLCDevice("COM7", 9600);
-
+            PLCDevice device = new PLCDevice("COM4", 9600);
+            //device.Device.Open();
             while (true)
             {
                 if (!device.IsDisposed)
                 {
                     log.Write($"Start sending request....");
-                    var b = device.ReadRequest(stationNumber: 1);
+                    var b = device.ReadRequest(stationNumber: 5);
                     //foreach (var item in b)
                     //{
                     //    log.Write(item.ToString());
                     //}
                 }
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
             }
 
         }

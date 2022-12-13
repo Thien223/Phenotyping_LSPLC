@@ -1,9 +1,9 @@
 import time
 import chardet
-from python.cores import LSPLC, AgentC, ModbusPLC
+from cores import LSPLC, AgentC, ModbusPLC
 
 if __name__ == '__main__':
-    device = LSPLC(port="COM7", baudrate=9600, timeout=50)
+    device = LSPLC(port="COM4", baudrate=9600, timeout=50)
     # agentC = AgentC(ip="localhost", port= 3395)
 
     count = 0

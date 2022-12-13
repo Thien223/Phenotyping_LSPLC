@@ -14,8 +14,8 @@ namespace SimpleCnetClient
         {
             var logger = new ConsoleChannelLogger();
             int count = 60;
-            //IChannel channel = new SerialPortChannel("COM7", 9600, 8, System.IO.Ports.StopBits.One, System.IO.Ports.Parity.None, System.IO.Ports.Handshake.None);     //Serial Port
-            IChannel channel = new TcpChannel("127.0.0.1", 3395) { Logger = logger };   //TCP Client
+            IChannel channel = new SerialPortChannel("COM4", 9600, 8, System.IO.Ports.StopBits.One, System.IO.Ports.Parity.None, System.IO.Ports.Handshake.None);     //Serial Port
+            //IChannel channel = new TcpChannel("127.0.0.1", 3395) { Logger = logger };   //TCP Client
             //IChannel channel = new TcpChannelProvider(1234) { Logger = logger };        //TCP Server
             //IChannel channel = new UdpChannel("127.0.0.1", 1234) { Logger = logger };   //UDP
 

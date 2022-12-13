@@ -40,7 +40,7 @@ namespace LSPLC.Cores
 
         private int Baudrate { get; set; }
 
-        private SerialPort Device { get; set; }
+        public SerialPort Device { get; set; }
 
         private readonly object openLock = new object();
         private readonly object closeLock = new object();
@@ -74,7 +74,6 @@ namespace LSPLC.Cores
                 if (Device != null && Device.IsOpen)
                 {
                     Device.Close();
-                    this.Dispose();
                     log.Write("Serial Device Closed..");
                 }
             }
@@ -114,15 +113,13 @@ namespace LSPLC.Cores
                         if (!Device.IsOpen)
                         {
                             Device.Open();
-                            ReadAllRemain();
-
-                            //log.Write("Read..");
+                            log.Write("Device openned.....");
                         }
                     }
                     catch (Exception ex)
                     {
+                        //Device.Close();
                         log.Write(ex.Message);
-                        this.Dispose();
                     }
                 }
             }
@@ -275,7 +272,7 @@ namespace LSPLC.Cores
         /// <param name="startVariable"></param>
         /// <param name="readCount"></param>
         /// <returns></returns>
-        public List<byte> ReadRequest(int stationNumber = 5, string startVariable = "%DW0014", int readCount = 96)
+        public List<byte> ReadRequest_(int stationNumber = 5, string startVariable = "%DW0014", int readCount = 96)
         {
             List<byte> buffers = new List<byte>();
             byte head = 0x05;
@@ -319,12 +316,11 @@ namespace LSPLC.Cores
             log.Write($"Final message: {string.Join(" ", requestMessage)}");
             //log.Write($"original message: {Encoding.ASCII.GetString(requestMessage.ToArray())}");
             //log.Write($"hex message: {Utils.ByteArrayToHexViaLookup32(requestMessage.ToArray())}");
-            if (this.Device.IsOpen)
-            {
-                Write(requestMessage.ToArray());
-            }
-            else { return null; }
+            Write(requestMessage.ToArray());
             
+
+
+
             log.Write($"Message have been writen to PLC... {this.Device.IsOpen}");
             //requestMessage.Add(header);
             //requestMessage.AddRange(Utils.ConvertToHex(stationNumber));
@@ -362,6 +358,7 @@ namespace LSPLC.Cores
             while (!stop)
             {
                 byte first = Read(2000);
+                Console.Write($"{string.Join(" ", first)} ");
                 buffers.Clear();
                 if (first == 0x06 || first==0x15)
                 {
@@ -380,6 +377,105 @@ namespace LSPLC.Cores
                             break;
                         }
                         
+                    }
+                }
+            }
+            log.Write($"Final response: {string.Join(" ", buffers.ToArray())}");
+            log.Write($"\n\n\n");
+
+            //log.Write($"buffers.Count: {buffers.Count}");
+            //log.Write($"'{string.Join(" ", buffers.ToArray())}'");
+            return buffers;
+        }
+
+
+        /// <summary>
+        /// request data from PLC from <startvariable>, to next <readcount> variables
+        /// </summary>
+        /// <param name="stationNumber"></param>
+        /// <param name="header"></param>
+        /// <param name="tail"></param>
+        /// <param name="startVariable"></param>
+        /// <param name="readCount"></param>
+        /// <returns></returns>
+        public List<byte> ReadRequest(int stationNumber = 5, string startVariable = "%DW0014", int readCount = 96)
+        {
+            List<byte> buffers = new List<byte>();
+
+            ///// ascii mode, convert ascii to hex, then get bytes
+            //string functionCode = 3.ToString("X");   /// 'R' if use BCC, 'r' if not
+            //string address_upper = 0.ToString("X");  //// SS for read continuosly
+            //string address_lower = 107.ToString("X");
+
+            //string datasize_upper = 0.ToString("X");  //// SS for read continuosly
+            //string datasize_lower = 96.ToString("X");
+
+
+            //byte[] s1 = Encoding.ASCII.GetBytes(functionCode);
+            //byte[] s2 = Encoding.ASCII.GetBytes(address_upper);
+            //byte[] s3 = Encoding.ASCII.GetBytes(address_lower);
+            //byte[] s4 = Encoding.ASCII.GetBytes(datasize_upper);
+            //byte[] s5 = Encoding.ASCII.GetBytes(datasize_lower);
+            //byte head = 0x05;
+            //// frame 예: 05(station number) 04(function code) 00(start address1) 00(start address2) 00(size1) 60(size2) F1(CRC1) A6(CRC2)
+            //// RTU mode, convert number to hex then get bytes
+            byte sNumber = 0x05;
+            byte functionCode = 0x04;   /// 'R' if use BCC, 'r' if not
+            byte address_upper = 0x9C;  //// SS for read continuosly
+            byte address_lower = 0x3F;
+
+            byte datasize_upper = 0x00;  //// SS for read continuosly
+            byte datasize_lower = 0x60;
+
+
+
+            List<byte> requestMessage = new List<byte>();
+            //requestMessage.Add(head); 
+            
+
+            //log.Write($"ENQ: {string.Join(" ", head)} ({Convert.ToChar(head)})");
+            requestMessage.Add(sNumber);
+            requestMessage.Add(functionCode);
+            log.Write($"Command: {string.Join("", functionCode)}");
+            requestMessage.Add(address_upper);
+            requestMessage.Add(address_lower);
+            //log.Write($"(byte)((int)CommandType & 0xFF): {string.Join(" ", (byte)((int)CommandType & 0xFF))} ()");
+            requestMessage.Add(datasize_upper);
+            requestMessage.Add(datasize_lower);
+
+            requestMessage.Add(0xF1);
+            requestMessage.Add(0xA6);
+
+            log.Write($"final message: {string.Join(" ", requestMessage)}");
+            Write(requestMessage.ToArray());
+            log.Write($"Start reading response");
+            bool stop = false;
+            //buffers.Clear();
+            //byte[] first = Read(8, 2000).ToArray();
+            //buffers.AddRange(first);
+            while (!stop)
+            {
+                buffers.Clear();
+                byte first = Read(2000);
+                buffers.Add(first);
+
+                if (first == 0x05)
+                {
+                    //Console.WriteLine($"\n");
+
+                    //Console.Write($"{string.Join(" ", first)} ");
+                    while (true)
+                    {
+                        var next = Read(2000);
+                        if (next == 0x05)
+                        {
+                            stop = true;
+                            break;
+                        }
+                        buffers.Add(next);
+                        //Console.Write($"{string.Join(" ", next)} ");
+                        
+
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LSPLC.Utilities;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,5 +43,61 @@ namespace LSPLC.Utilities
             return new string(result);
         }
 
+    }
+
+
+    public static class Crc16
+    {
+        public static ushort ComputeCRC(byte[] buf)
+        {
+            ushort crc = 0xFFFF;
+            int len = buf.Length;
+
+            for (int pos = 0; pos < len; pos++)
+            {
+                crc ^= buf[pos];
+
+                for (int i = 8; i != 0; i--)
+                {
+                    if ((crc & 0x0001) != 0)
+                    {
+                        crc >>= 1;
+                        crc ^= 0xA001;
+                    }
+                    else
+                        crc >>= 1;
+                }
+            }
+            //return crc; lo-hi
+            //bytes hi-lo reordered
+            return (ushort)((crc >> 8) | (crc << 8));
+        }
+
+        // Compute the MODBUS RTU CRC
+        public static ushort ModRTU_CRC(byte[] buf)
+        {
+            int len = buf.Length;
+            UInt16 crc = 0xFFFF;
+
+            for (int pos = 0; pos < len; pos++)
+            {
+                crc ^= (UInt16)buf[pos];          // XOR byte into least sig. byte of crc
+
+                for (int i = 8; i != 0; i--)      // Loop over each bit
+                {
+                    if ((crc & 0x0001) != 0)        // If the LSB is set
+                    {
+                        crc >>= 1;                    // Shift right and XOR 0xA001
+                        crc ^= 0xA001;
+                    }
+                    else                            // Else LSB is not set
+                    {
+                        crc >>= 1;                    // Just shift right
+                    }
+                }
+            }
+            // Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
+            return crc;
+        }
     }
 }
