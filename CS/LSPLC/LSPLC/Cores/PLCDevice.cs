@@ -15,6 +15,8 @@ using System.Reflection;
 using VagabondK.Protocols.LSElectric;
 using System.Runtime.ExceptionServices;
 using static System.Net.Mime.MediaTypeNames;
+using System.Data;
+using Modbus.Device;
 
 namespace LSPLC.Cores
 {
@@ -24,8 +26,10 @@ namespace LSPLC.Cores
         {
             Port = port;
             Baudrate = baudrate;
-            Device = new SerialPort(portName: Port, baudRate: Baudrate, parity: Parity.None);
+            Device = new SerialPort(portName: Port, baudRate: Baudrate, parity: Parity.None, stopBits: StopBits.One, dataBits: 8);
             log = new Log(GetType().Name);
+            Device.Open();
+            master = ModbusSerialMaster.CreateRtu(Device);
         }
         private Log log;
         /// <summary>
@@ -40,15 +44,15 @@ namespace LSPLC.Cores
 
         private int Baudrate { get; set; }
 
-        public SerialPort Device { get; set; }
+        private SerialPort Device { get; set; }
+
+        public IModbusSerialMaster master;
 
         private readonly object openLock = new object();
-        private readonly object closeLock = new object();
         private readonly object readLock = new object();
         private readonly object writeLock = new object();
         private readonly Queue<byte> readBuffer = new Queue<byte>();
         private readonly EventWaitHandle readEventWaitHandle = new EventWaitHandle(false, EventResetMode.ManualReset);
-        private readonly string description;
         private bool isRunningReceive = false;
 
 
@@ -170,7 +174,6 @@ namespace LSPLC.Cores
                 }
                 else return readBuffer.Dequeue();
             }
-
             if (timeout == 0 ? readEventWaitHandle.WaitOne() : readEventWaitHandle.WaitOne(timeout))
                 return readBuffer.Count > 0 ? readBuffer.Dequeue() : (byte?)null;
             else
@@ -190,7 +193,34 @@ namespace LSPLC.Cores
                 {
                     if (Device.IsOpen)
                     {
+                        Device.DiscardInBuffer();
                         Device.Write(bytes, 0, bytes.Length);
+                        //log.Write("Writing successed..");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Close();
+                    throw ex;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 바이트 배열 쓰기
+        /// </summary>
+        /// <param name="bytes">바이트 배열</param>
+        public void WriteText(string str)
+        {
+            CheckPort();
+            lock (writeLock)
+            {
+                try
+                {
+                    if (Device.IsOpen)
+                    {
+                        Device.Write(str);
                         //log.Write("Writing successed..");
                     }
                 }
@@ -207,12 +237,19 @@ namespace LSPLC.Cores
         /// </summary>
         /// <param name="timeout">제한시간(밀리초)</param>
         /// <returns>읽은 바이트</returns>
-        public byte Read(int timeout)
+        public byte ReadOne(int timeout = 2000)
         {
             lock (readLock)
             {
-                byte a = GetByte(timeout) ?? throw new TimeoutException();
-                return a;
+                try
+                {
+                    byte a = GetByte(timeout).Value;
+                    return a;
+                }catch (Exception ex) {
+                    Console.WriteLine(ex.StackTrace);
+                    return 0;
+                    
+                }
             }
         }
 
@@ -222,7 +259,7 @@ namespace LSPLC.Cores
         /// <param name="count">읽을 개수</param>
         /// <param name="timeout">제한시간(밀리초)</param>
         /// <returns>읽은 바이트 열거</returns>
-        public IEnumerable<byte> Read(uint count, int timeout)
+        public IEnumerable<byte> ReadMany(uint count, int timeout)
         {
             lock (readLock)
             {
@@ -267,221 +304,122 @@ namespace LSPLC.Cores
         /// request data from PLC from <startvariable>, to next <readcount> variables
         /// </summary>
         /// <param name="stationNumber"></param>
-        /// <param name="header"></param>
-        /// <param name="tail"></param>
         /// <param name="startVariable"></param>
         /// <param name="readCount"></param>
+        /// <param name="functionCode"></param> /// read command support 1~4 function code
         /// <returns></returns>
-        public List<byte> ReadRequest_(int stationNumber = 5, string startVariable = "%DW0014", int readCount = 96)
+        public List<byte> ReadRequest(int stationNumber = 5, string startVariable = "D00000", int readCount = 96, int functionCode = 2)
         {
+            int dec_address = int.Parse(startVariable.Substring(1));
+
+            ////// prepare data to write
+            /////
+            //switch (functionCode)
+            //{
+            //    case 1: //// Read bit 
+            //        throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+            //    case 2: //// Read bit K00000 ~ K00017
+            //         //// take index from address (K00000 --> 0) dont need to substract
+            //        break;
+            //    case 3: //// Read word
+            //        throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+            //    case 4: //// Read word D0014~ D0109, K0011~K0106, D00600~D00607
+            //        string addressPrefix = startVariable.Substring(0, 1);   //// take first character of address (D0014 --> D)
+            //        if (addressPrefix.Equals("D"))
+            //        {
+            //            if (14 >= temp && temp < 110)
+            //            {
+            //                dec_address = temp - 14; ///// D0014 = address 0 --> address = 0014 - 14
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                dec_address = temp - 600; ///// D00600 = address 0 --> address = 00600 - 600
+            //            }
+            //        }
+            //        else
+            //        {
+            //            dec_address = temp - 11; ///// K0011 = address 0 --> address = 0011 - 11
+            //        }
+            //        break;
+            //    default:
+            //        throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+            //}
+
             List<byte> buffers = new List<byte>();
-            byte head = 0x05;
-            byte[] sNumber = Utils.ConvertToHex(stationNumber);
+            int dec_addressUpper = dec_address >> 8;
+            int dec_adressLower = dec_address & 0xFF;
 
-            byte Command = (byte)CnetCommand.Read; //// 'R' if use BCC, 'r' if not
-            var CommandType = CnetCommandType.Continuous;  //// SS for read continuosly
+            byte b_stationNumber = Convert.ToByte(stationNumber);
+            byte b_functionCode = Convert.ToByte(functionCode);
+            byte b_addressUpper = Convert.ToByte(dec_addressUpper);
+            byte b_addressLower = Convert.ToByte(dec_adressLower);
+            byte b_numberOfOuputUpper = Convert.ToByte(0);
+            byte b_numberOfOuputLower = Convert.ToByte(readCount);
 
+            List<byte> b_requestMessage = new List<byte> {
+                b_stationNumber,
+                b_functionCode,
+                b_addressUpper,
+                b_addressLower,
+                b_numberOfOuputUpper,
+                b_numberOfOuputLower
+            };
 
-            DeviceVariable address = new DeviceVariable();
-            DeviceVariable.TryParse(startVariable, out address);
-            StringBuilder stringBuilder = new StringBuilder($"%{(char)address.DeviceType}{(char)address.DataType}{address.Index}");
-            byte[] variableName = Encoding.ASCII.GetBytes(stringBuilder.ToString());
+            var crc = Crc16.ModRTU_CRC(b_requestMessage.ToArray());
 
-            byte[] variableSize = Utils.ConvertToHex(variableName.Length);
-            byte[] numberOfData = Utils.ConvertToHex(readCount);
-            byte tail = 0x04;
+            byte b_crcUpper = Convert.ToByte(crc >> 8);
+            byte b_crcLower = Convert.ToByte(crc & 0xFF);
+            //Console.WriteLine("upper: {0:X2}", b_crcUpper);
+            //Console.WriteLine("lower: {0:X2}", b_crcLower);
 
+            b_requestMessage.Add(b_crcLower);
+            b_requestMessage.Add(b_crcUpper);
 
-            List<byte> requestMessage = new List<byte>();
-            requestMessage.Add(head);
-
-            log.Write($"ENQ: {string.Join(" ", head)} ({Convert.ToChar(head)})");
-            requestMessage.AddRange(sNumber);
-            log.Write($"sNumber: {string.Join(" ", sNumber)} ({Encoding.ASCII.GetString(sNumber)})");
-            requestMessage.Add(Command);
-            log.Write($"Command: {string.Join(" ", Command)} ({Convert.ToChar(Command)})");
-            requestMessage.Add((byte)((int)CommandType >> 8));
-            requestMessage.Add((byte)((int)CommandType & 0xFF));
-            log.Write($"CommandType: {string.Join(" ", (byte)((int)CommandType >> 8), (byte)((int)CommandType & 0xFF))} ({Convert.ToChar((byte)((int)CommandType >> 8))}{Convert.ToChar((byte)((int)CommandType & 0xFF))})");
-            //log.Write($"(byte)((int)CommandType & 0xFF): {string.Join(" ", (byte)((int)CommandType & 0xFF))} ()");
-            requestMessage.AddRange(variableSize);
-            log.Write($"variableSize: {string.Join(" ", variableSize)} ({Encoding.ASCII.GetString(variableSize)})");
-            requestMessage.AddRange(variableName);
-            log.Write($"variableName: {string.Join(" ", variableName)} ({Encoding.ASCII.GetString(variableName)})");
-            requestMessage.AddRange(numberOfData);
-            log.Write($"numberOfData: {string.Join(" ", numberOfData)} ({Encoding.ASCII.GetString(numberOfData)})");
-            requestMessage.Add(tail);
-            log.Write($"EXT: {string.Join(" ", tail)} ({Convert.ToChar(tail)})");
-
-            log.Write($"Final message: {string.Join(" ", requestMessage)}");
-            //log.Write($"original message: {Encoding.ASCII.GetString(requestMessage.ToArray())}");
-            //log.Write($"hex message: {Utils.ByteArrayToHexViaLookup32(requestMessage.ToArray())}");
-            Write(requestMessage.ToArray());
-            
-
-
-
-            log.Write($"Message have been writen to PLC... {this.Device.IsOpen}");
-            //requestMessage.Add(header);
-            //requestMessage.AddRange(Utils.ConvertToHex(stationNumber));
-            //log.Write($"stationNumber: {string.Join(" ", Utils.ConvertToHex(stationNumber.ToString()))}");
-            //requestMessage.AddRange(Utils.ConvertToHex(Command.ToString()));
-
-            ////log.Write($"Command: {string.Join(" ", requestMessage)}");
-            ////// add command type (SS for read individual, SB for read continuosly)
-            //requestMessage.AddRange(Utils.ConvertToHex(CommandType));
-            ////log.Write($"CommandType: {string.Join(" ", requestMessage)}");
-            ///// add data area
-            //requestMessage.AddRange(Utils.ConvertToHex(variableSize));
-            ////log.Write($"variableSize: {string.Join(" ", requestMessage)}");
-            //requestMessage.AddRange(Utils.ConvertToHex(variableName));
-            ////log.Write($"variableName: {string.Join(" ", requestMessage)}");
-            ////requestMessage.AddRange(Encoding.ASCII.GetBytes(numberOfData.ToString()));
-            ///// 
-
-            ////requestMessage.AddRange(Utils.ConvertToHex(variableSize1));
-            //////log.Write($"variableSize1: {string.Join(" ", requestMessage)}");
-            ////requestMessage.AddRange(Utils.ConvertToHex(variableName1));
-            ////log.Write($"variableName1: {string.Join(" ", requestMessage)}");
-            ////// add EOT 
-            //requestMessage.Add(tail);
-            ///// add BCC
-            ///// requestMessage.AddRange(Encoding.ASCII.GetBytes((requestMessage.Sum(b => b) % 256).ToString("X2")));
-            //log.Write($"requestMessage: {string.Join(" ", requestMessage.ToArray())}");
-            //Write(requestMessage.ToArray());
-            //var res_header = Read(2000);
-
-            //log.Write($"res_header: '{string.Join("", res_header)}'");
-
-            log.Write($"Start reading response");
-            bool stop = false;
-            while (!stop)
+            if (b_requestMessage.Count == 8)
             {
-                byte first = Read(2000);
-                Console.Write($"{string.Join(" ", first)} ");
-                buffers.Clear();
-                if (first == 0x06 || first==0x15)
+                Write(b_requestMessage.ToArray());
+                bool stop = false;
+                while (!stop)
                 {
-                    //Console.WriteLine($"\n");
-                    buffers.Add(first);
-                    //Console.Write($"{string.Join(" ", first)} ");
-                    while (true)
+                    buffers.Clear();
+                    byte res_stationNumber = ReadOne(); /// station code
+                    if (res_stationNumber == stationNumber)
                     {
-                        var next = Read(2000);
-                        buffers.Add(next);
-                        //Console.Write($"{string.Join(" ", next)} ");
-                        if (next == 0x03 || next==0x06)
+                        byte res_functionCode = ReadOne();
+                        if (res_functionCode == 1 || res_functionCode == 2 || res_functionCode == 3 || res_functionCode == 4)
                         {
-                            //Console.WriteLine($"\n");
-                            stop = true;
-                            break;
+                            var res_numberOfBytes = ReadOne();
+                            if (res_numberOfBytes == readCount * 2)
+                            {
+                                var data = ReadMany((uint)readCount * 2, 2000).ToArray();
+                                var res_crcUpper = ReadOne();
+                                var res_crcLower = ReadOne();
+                                buffers.Add(res_stationNumber);
+                                buffers.Add(res_functionCode);
+                                buffers.Add(res_numberOfBytes);
+                                buffers.AddRange(data);
+
+                                var temp_crc = Crc16.ModRTU_CRC(buffers.ToArray());
+                                if ((temp_crc >> 8) == res_crcLower && ((temp_crc & 0xFF) == res_crcUpper))
+                                {
+                                    log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
+                                    Console.WriteLine($"\n\n\n");
+                                }
+                            }
                         }
-                        
+                        else if (res_functionCode == 84 || functionCode == 82)
+                        {
+                            log.Write("ERROR ....");
+                        }
+                        stop = true;
                     }
+                    //else
+                    //{
+                    //    throw new Exception($"PLC returns invalid station number (<{res_stationNumber}>)");
+                    //}
                 }
             }
-            log.Write($"Final response: {string.Join(" ", buffers.ToArray())}");
-            log.Write($"\n\n\n");
-
-            //log.Write($"buffers.Count: {buffers.Count}");
-            //log.Write($"'{string.Join(" ", buffers.ToArray())}'");
-            return buffers;
-        }
-
-
-        /// <summary>
-        /// request data from PLC from <startvariable>, to next <readcount> variables
-        /// </summary>
-        /// <param name="stationNumber"></param>
-        /// <param name="header"></param>
-        /// <param name="tail"></param>
-        /// <param name="startVariable"></param>
-        /// <param name="readCount"></param>
-        /// <returns></returns>
-        public List<byte> ReadRequest(int stationNumber = 5, string startVariable = "%DW0014", int readCount = 96)
-        {
-            List<byte> buffers = new List<byte>();
-
-            ///// ascii mode, convert ascii to hex, then get bytes
-            //string functionCode = 3.ToString("X");   /// 'R' if use BCC, 'r' if not
-            //string address_upper = 0.ToString("X");  //// SS for read continuosly
-            //string address_lower = 107.ToString("X");
-
-            //string datasize_upper = 0.ToString("X");  //// SS for read continuosly
-            //string datasize_lower = 96.ToString("X");
-
-
-            //byte[] s1 = Encoding.ASCII.GetBytes(functionCode);
-            //byte[] s2 = Encoding.ASCII.GetBytes(address_upper);
-            //byte[] s3 = Encoding.ASCII.GetBytes(address_lower);
-            //byte[] s4 = Encoding.ASCII.GetBytes(datasize_upper);
-            //byte[] s5 = Encoding.ASCII.GetBytes(datasize_lower);
-            //byte head = 0x05;
-            //// frame 예: 05(station number) 04(function code) 00(start address1) 00(start address2) 00(size1) 60(size2) F1(CRC1) A6(CRC2)
-            //// RTU mode, convert number to hex then get bytes
-            byte sNumber = 0x05;
-            byte functionCode = 0x04;   /// 'R' if use BCC, 'r' if not
-            byte address_upper = 0x9C;  //// SS for read continuosly
-            byte address_lower = 0x3F;
-
-            byte datasize_upper = 0x00;  //// SS for read continuosly
-            byte datasize_lower = 0x60;
-
-
-
-            List<byte> requestMessage = new List<byte>();
-            //requestMessage.Add(head); 
-            
-
-            //log.Write($"ENQ: {string.Join(" ", head)} ({Convert.ToChar(head)})");
-            requestMessage.Add(sNumber);
-            requestMessage.Add(functionCode);
-            log.Write($"Command: {string.Join("", functionCode)}");
-            requestMessage.Add(address_upper);
-            requestMessage.Add(address_lower);
-            //log.Write($"(byte)((int)CommandType & 0xFF): {string.Join(" ", (byte)((int)CommandType & 0xFF))} ()");
-            requestMessage.Add(datasize_upper);
-            requestMessage.Add(datasize_lower);
-
-            requestMessage.Add(0xF1);
-            requestMessage.Add(0xA6);
-
-            log.Write($"final message: {string.Join(" ", requestMessage)}");
-            Write(requestMessage.ToArray());
-            log.Write($"Start reading response");
-            bool stop = false;
-            //buffers.Clear();
-            //byte[] first = Read(8, 2000).ToArray();
-            //buffers.AddRange(first);
-            while (!stop)
-            {
-                buffers.Clear();
-                byte first = Read(2000);
-                buffers.Add(first);
-
-                if (first == 0x05)
-                {
-                    //Console.WriteLine($"\n");
-
-                    //Console.Write($"{string.Join(" ", first)} ");
-                    while (true)
-                    {
-                        var next = Read(2000);
-                        if (next == 0x05)
-                        {
-                            stop = true;
-                            break;
-                        }
-                        buffers.Add(next);
-                        //Console.Write($"{string.Join(" ", next)} ");
-                        
-
-                    }
-                }
-            }
-            log.Write($"Final response: {string.Join(" ", buffers.ToArray())}");
-            log.Write($"\n\n\n");
-
             //log.Write($"buffers.Count: {buffers.Count}");
             //log.Write($"'{string.Join(" ", buffers.ToArray())}'");
             return buffers;
@@ -491,39 +429,161 @@ namespace LSPLC.Cores
         /// write to plc
         /// </summary>
         /// <param name="stationNumber"></param>
-        /// <param name="header"></param>
-        /// <param name="tail"></param>
         /// <param name="startVariable"></param>
         /// <param name="readCount"></param>
-        public void WriteRequest(byte stationNumber = 0x35, byte header = 0x05, byte tail = 0x04, string startVariable = "%MW100", int readCount = 96)
+        /// <param name="functionCode"></param> write command support function code = 5, 6, 15 or 16
+        public void WriteRequest(List<int> values, int stationNumber = 5, string startVariable = "D0014", int outputCount = 96, int functionCode = 15)
         {
-            var Command = 'W'; //// 'R' if use BCC, 'r' if not
-            var CommandType = "SB"; //// SS for read individual, SB for continuosly
-            var variableSize = "6";
-            var variableName = startVariable;
-            var numberOfData = readCount;
-
-            List<byte> requestMessage = new List<byte>
+            if (values == null || values.Count != outputCount)
             {
-                /// add ENQ
-                header,
-                //// add station number
-                stationNumber,
-                //// add command (r,R for read, w,W for write)
-                (byte)Command,
+                throw new FormatException("data to write could not 'null' or 'not equal to outputCount'...");
+            }
 
+            int dec_address;
+            int validRequestLength;
+            //// take address bytes from input StartVariable
+            dec_address = int.Parse(startVariable.Substring(1));
+            switch (functionCode)
+            {
+                case 5:
+                    throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+                case 6:
+                    throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+                case 15: /// write bit K00000 ~ K00017
+                    validRequestLength = 1 + 1 + 2 + 2 + 1 + outputCount + 2;
+                    //dec_address = int.Parse(startVariable.Substring(1)); //// take index from address (K00000 --> 0) dont need to substract
+                    break;
+                case 16: ///// write word D0014 ~ D0109 or K0011~K0106
+                    //string addressPrefix = startVariable.Substring(0, 1);   //// take first character of address (D0014 --> D)
+                    //int temp = int.Parse(startVariable.Substring(1));
+                    validRequestLength = 1 + 1 + 2 + 2 + 1 + (outputCount * 2) + 2;
+                    //if (addressPrefix.Equals("D"))
+                    //{
+                    //    dec_address = temp - 14; ///// D0014 = address 0 --> address = 0014 - 14
+                    //}
+                    //else
+                    //{
+                    //    dec_address = temp - 11; ///// K0011 = address 0 --> address = 0011 - 11
+                    //}
+                    break;
+                default:
+                    throw new NotSupportedException($"Function code <{functionCode}> is not supported");
+            }
 
+            List<byte> buffers = new List<byte>();
+            int dec_addressUpper = dec_address >> 8;
+            int dec_adressLower = dec_address & 0xFF;
+            //// prepare data to write
+            byte b_stationNumber = Convert.ToByte(stationNumber);
+            byte b_functionCode = Convert.ToByte(functionCode);
+            byte b_addressUpper = Convert.ToByte(dec_addressUpper);
+            byte b_addressLower = Convert.ToByte(dec_adressLower);
+
+            byte b_numberOfOuputUpper = Convert.ToByte(0);  //// number of output as 8 bits format
+            byte b_numberOfOuputLower = Convert.ToByte(outputCount); //// number of output as 8bits
+
+            byte b_outputCount = Convert.ToByte(outputCount * 2);   ///// numberOfOuput ( = number of output x 2) by hex because each value of output takes 2 bytes
+
+            List<byte> b_requestMessage = new List<byte> {
+                b_stationNumber,
+                b_functionCode,
+                b_addressUpper,
+                b_addressLower,
+                b_numberOfOuputUpper,
+                b_numberOfOuputLower,
+                b_outputCount
             };
-            //// add command type (SS for read individual, SB for read continuosly)
-            //byte[] cmdType = Utils.ConvertToBytes(CommandType); /// convert command to 
-            //requestMessage.AddRange(cmdType);
-            /// add data area
-            requestMessage.AddRange(Encoding.ASCII.GetBytes(variableSize));
-            requestMessage.AddRange(Encoding.ASCII.GetBytes(variableName));
-            requestMessage.AddRange(Encoding.ASCII.GetBytes(numberOfData.ToString()));
-            /// 
-            //// add EOT 
-            requestMessage.Add(tail);
+
+            //// append data to be writen to request message:
+            for (int i = 0; i < outputCount; i++)
+            {
+                if (functionCode == 16)
+                {
+                    int b_upper = values[i] >> 8;
+                    int b_lower = values[i] & 0xFF;
+                    b_requestMessage.Add(Convert.ToByte(b_upper));
+                    b_requestMessage.Add(Convert.ToByte(b_lower));
+                }else if (functionCode == 15)
+                {
+                    int b_upper = values[i] >> 8;
+                    b_requestMessage.Add(Convert.ToByte(b_upper));
+                }
+            }
+            /// calculate CRC
+            var crc = Crc16.ModRTU_CRC(b_requestMessage.ToArray());
+            byte b_crcUpper = Convert.ToByte(crc >> 8);
+            byte b_crcLower = Convert.ToByte(crc & 0xFF);
+            //// ADD CRC to request
+            b_requestMessage.Add(b_crcLower);
+            b_requestMessage.Add(b_crcUpper);
+
+            log.Write($"final message: '{string.Join("", b_requestMessage)}'");
+            log.Write($"Frame length: {b_requestMessage.Count}, valid length: {validRequestLength}");
+            if (b_requestMessage.Count == validRequestLength)
+            {
+                Write(b_requestMessage.ToArray());
+
+                bool stop = false;
+                while (!stop)
+                {
+                    buffers.Clear();
+                    byte res_stationNumber = ReadOne(); /// station code
+                    if (res_stationNumber == stationNumber)
+                    {
+                        byte res_functionCode = ReadOne();
+                        if (res_functionCode == 15 || res_functionCode == 16)
+                        {
+                            var res_addressUpper = ReadOne();
+                            var res_addressLower = ReadOne();
+                            if (res_addressUpper == dec_addressUpper && res_addressLower == dec_adressLower)
+                            {
+                                var res_numberOfOuputUpper = ReadOne();
+                                var res_numberOfOuputLower = ReadOne();
+
+                                if (res_numberOfOuputUpper == b_numberOfOuputUpper && res_numberOfOuputLower == b_numberOfOuputLower)
+                                {
+                                    var res_crcUpper = ReadOne();
+                                    var res_crcLower = ReadOne();
+                                    buffers.Add(res_stationNumber);
+                                    buffers.Add(res_functionCode);
+                                    buffers.Add(res_addressUpper);
+                                    buffers.Add(res_addressLower);
+                                    buffers.Add(res_numberOfOuputUpper);
+                                    buffers.Add(res_numberOfOuputLower);
+
+                                    var temp_crc = Crc16.ModRTU_CRC(buffers.ToArray());
+
+                                    if ((temp_crc >> 8) == res_crcLower && ((temp_crc & 0xFF) == res_crcUpper))
+                                    {
+                                        
+                                        log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
+                                        Console.WriteLine($"111 \n\n\n");
+                                    }
+                                }
+                            }
+
+                            //else
+                            //{
+                            //    throw new Exception($"PLC returns unconsistant length of data (received: <{data.Length}>, expected: <6>");
+                            //}
+                        }
+                        else if (res_functionCode == 95 || res_functionCode == 96 || res_functionCode == 90)
+                        {
+                            log.Write($"WRITE ERROR... ");
+                        }
+                            //else
+                            //{
+                            //    throw new Exception($"PLC returns invalid function code (<{res_functionCode}>)");
+                            //}
+                            stop = true;
+                    }
+                    else
+                    {
+                        buffers.Clear();
+                        break;
+                    }
+                }
+            }
         }
     }
 }

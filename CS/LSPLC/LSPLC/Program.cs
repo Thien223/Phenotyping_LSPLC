@@ -1,5 +1,6 @@
 ﻿using LSPLC.Cores;
 using LSPLC.Utilities;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -23,6 +24,21 @@ namespace LSPLC
 {
     internal class Program
     {
+        private static DateTime Delay(int MS)
+        {
+            DateTime ThisMoment = DateTime.Now;
+            TimeSpan duration = new TimeSpan(0, 0, 0, 0, MS);
+            DateTime AfterWards = ThisMoment.Add(duration);
+
+            while (AfterWards >= ThisMoment)
+            {
+                System.Windows.Forms.Application.DoEvents();
+                ThisMoment = DateTime.Now;
+            }
+
+            return DateTime.Now;
+        }
+
         static void Main(string[] args)
         {
             //Console.WriteLine($"started...");
@@ -47,22 +63,33 @@ namespace LSPLC
             //    Console.WriteLine($"변수: {item.Key}, 값: {item.Value.WordValue}");
 
             Log log = new Log("Main");
-            PLCDevice device = new PLCDevice("COM4", 9600);
+            PLCDevice device = new PLCDevice("COM8", 9600);
             //device.Device.Open();
+
+            var a = 255;
             while (true)
             {
                 if (!device.IsDisposed)
                 {
-                    log.Write($"Start sending request....");
-                    var b = device.ReadRequest(stationNumber: 5);
+                    //log.Write($"Start sending request....");
+                    var b = device.ReadRequest(stationNumber: 0, startVariable:"D00600", readCount:8, functionCode:3);
+                    List<int> values = new List<int> {a++, a, a, a, a, a, a, a };
+                    //List<int> values = new List<int> {01,01,00,00,00,00,00,00};
+                    try
+                    {
+                        device.WriteRequest(values, stationNumber: 0, startVariable: "D00600", outputCount: 8, functionCode: 16);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.StackTrace);
+                    }
                     //foreach (var item in b)
                     //{
                     //    log.Write(item.ToString());
                     //}
                 }
-                Thread.Sleep(1000);
+                Delay(100);
             }
-
         }
     }
 }
