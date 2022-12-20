@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LSPLC.Cores
+﻿namespace LSPLC.Cores
 {
     /// <summary>
     /// LS ELECTRIC(구 LS산전) PLC 데이터 형식
