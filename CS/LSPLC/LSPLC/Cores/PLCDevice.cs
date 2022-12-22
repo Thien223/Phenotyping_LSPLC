@@ -329,7 +329,7 @@ namespace LSPLC.Cores
             byte b_addressLower = Convert.ToByte(dec_adressLower);
             byte b_dataSizeUpper = Convert.ToByte(readCount>>8);
             byte b_dataSizeLower = Convert.ToByte(readCount&0xFF);
-
+            Console.WriteLine("b_functionCode: {0:X2}", b_functionCode);
             List<byte> b_requestMessage = new List<byte> {
                 b_stationNumber,
                 b_functionCode,
@@ -343,65 +343,67 @@ namespace LSPLC.Cores
 
             byte b_crcUpper = Convert.ToByte(crc >> 8);
             byte b_crcLower = Convert.ToByte(crc & 0xFF);
-            //Console.WriteLine("upper: {0:X2}", b_crcUpper);
-            //Console.WriteLine("lower: {0:X2}", b_crcLower);
+            Console.WriteLine("upper: {0:X2}", b_crcUpper);
+            Console.WriteLine("lower: {0:X2}", b_crcLower);
 
             b_requestMessage.Add(b_crcLower);
+
+            Console.WriteLine($"b_requestMessage.Count1: {b_requestMessage.Count}");
             b_requestMessage.Add(b_crcUpper);
 
-            if (b_requestMessage.Count == 8)
+            Console.WriteLine($"b_requestMessage.Count2: {b_requestMessage.Count}");
+            Console.WriteLine("Final Read request:");
+            for (int i = 0; i < b_requestMessage.Count; i += 1)
             {
-                //// send request to plc
-                Write(b_requestMessage.ToArray());
+                Console.Write($"{b_requestMessage[i].ToString("X2")}");
+            }
+            Console.WriteLine("");
+            //// send request to plc
+            Write(b_requestMessage.ToArray());
 
-                //// take the response
-                bool stop = false;
-                while (!stop)
+            //// take the response
+            bool stop = false;
+            while (!stop)
+            {
+                buffers.Clear();
+                byte res_stationNumber = ReadOne(); /// station code
+                if (res_stationNumber == stationNumber)
                 {
-                    buffers.Clear();
-                    byte res_stationNumber = ReadOne(); /// station code
-                    if (res_stationNumber == stationNumber)
+                    byte res_functionCode = ReadOne();
+                    if (res_functionCode == 1 || res_functionCode == 2 || res_functionCode == 3 || res_functionCode == 4)
                     {
-                        byte res_functionCode = ReadOne();
-                        if (res_functionCode == 1 || res_functionCode == 2 || res_functionCode == 3 || res_functionCode == 4)
+                        var res_numberOfBytes = ReadOne();
+                        log.Write($"res_numberOfBytes: '{res_numberOfBytes}' -- validResponseNumberOfBytes: '{validResponseNumberOfBytes}'");
+                        if (res_numberOfBytes == validResponseNumberOfBytes)
                         {
-                            var res_numberOfBytes = ReadOne();
-                            if (res_numberOfBytes == validResponseNumberOfBytes)
+                            data = ReadMany((uint)validResponseNumberOfBytes, 2000).ToArray();
+                            var res_crcUpper = ReadOne();
+                            var res_crcLower = ReadOne();
+                            buffers.Add(res_stationNumber);
+                            buffers.Add(res_functionCode);
+                            buffers.Add(res_numberOfBytes);
+                            buffers.AddRange(data);
+
+                            var temp_crc = Crc16.ModRTU_CRC(buffers.ToArray());
+                            if ((temp_crc >> 8) == res_crcLower && ((temp_crc & 0xFF) == res_crcUpper))
                             {
-                                data = ReadMany((uint)validResponseNumberOfBytes, 2000).ToArray();
-
-                                for (int i = 0; i < data.Length - 1; i += 2)
-                                {
-                                    Console.Write($"{data[i].ToString("X2")}{data[i + 1].ToString("X2")}-");
-                                }
-                                var res_crcUpper = ReadOne();
-                                var res_crcLower = ReadOne();
-                                buffers.Add(res_stationNumber);
-                                buffers.Add(res_functionCode);
-                                buffers.Add(res_numberOfBytes);
-                                buffers.AddRange(data);
-
-                                var temp_crc = Crc16.ModRTU_CRC(buffers.ToArray());
-                                if ((temp_crc >> 8) == res_crcLower && ((temp_crc & 0xFF) == res_crcUpper))
-                                {
-                                    //b_lst_data = data.ToList();
-                                    log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
-                                    Console.WriteLine($"\n\n\n");
-                                    return data;
-                                }
+                                //b_lst_data = data.ToList();
+                                log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
+                                Console.WriteLine($"\n\n\n");
+                                return data;
                             }
                         }
-                        else if (res_functionCode == 84 || functionCode == 82)
-                        {
-                            log.Write("ERROR ....");
-                        }
-                        stop = true;
                     }
-                    //else
-                    //{
-                    //    throw new Exception($"PLC returns invalid station number (<{res_stationNumber}>)");
-                    //}
+                    else if (res_functionCode == 84 || functionCode == 82)
+                    {
+                        log.Write("ERROR ....");
+                    }
+                    stop = true;
                 }
+                //else
+                //{
+                //    throw new Exception($"PLC returns invalid station number (<{res_stationNumber}>)");
+                //}
             }
             //log.Write($"buffers.Count: {buffers.Count}");
             //log.Write($"'{string.Join(" ", buffers.ToArray())}'");
@@ -421,11 +423,11 @@ namespace LSPLC.Cores
             {
                 throw new FormatException("data to write could not 'null' or 'not equal to outputCount'...");
             }
-
             int dec_address;
             int validRequestLength;
             //// take address bytes from input StartVariable
             dec_address = int.Parse(startVariable.Substring(1));
+            byte b_outputCount;
             switch (functionCode)
             {
                 case 5:
@@ -434,12 +436,14 @@ namespace LSPLC.Cores
                     throw new NotSupportedException($"Function code <{functionCode}> is not supported");
                 case 15: /// write bit K00000 ~ K00017
                     validRequestLength = 1 + 1 + 2 + 2 + 1 + outputCount + 2;
+                    b_outputCount = Convert.ToByte(outputCount);
                     //dec_address = int.Parse(startVariable.Substring(1)); //// take index from address (K00000 --> 0) dont need to substract
                     break;
                 case 16: ///// write word D0014 ~ D0109 or K0011~K0106
                     //string addressPrefix = startVariable.Substring(0, 1);   //// take first character of address (D0014 --> D)
                     //int temp = int.Parse(startVariable.Substring(1));
                     validRequestLength = 1 + 1 + 2 + 2 + 1 + (outputCount * 2) + 2;
+                    b_outputCount = Convert.ToByte(outputCount * 2);   ///// numberOfOuput ( = number of output x 2) by hex because each value of output takes 2 bytes
                     //if (addressPrefix.Equals("D"))
                     //{
                     //    dec_address = temp - 14; ///// D0014 = address 0 --> address = 0014 - 14
@@ -463,13 +467,12 @@ namespace LSPLC.Cores
             byte b_addressLower = Convert.ToByte(dec_adressLower);
             byte b_dataSizeUpper = Convert.ToByte(outputCount >> 8);
             byte b_dataSizeLower = Convert.ToByte(outputCount & 0xFF);
-
-            byte b_outputCount = Convert.ToByte(outputCount * 2);   ///// numberOfOuput ( = number of output x 2) by hex because each value of output takes 2 bytes
-            Console.WriteLine($"b_stationNumber: {string.Join("", b_stationNumber.ToString("X2"))}");
-            Console.WriteLine($"b_functionCode: {string.Join("", b_functionCode.ToString("X2"))}");
-            Console.WriteLine($"StartAddress: {string.Join("", b_addressUpper.ToString("X2"), b_addressLower.ToString("X2"))}");
-            Console.WriteLine($"datasize: {string.Join("", b_dataSizeUpper.ToString("X2"), b_dataSizeLower.ToString("X2"))}");
-            Console.WriteLine($"b_outputCount: {b_outputCount}");
+            
+            //Console.WriteLine($"b_stationNumber: {string.Join("", b_stationNumber.ToString("X2"))}");
+            //Console.WriteLine($"b_functionCode: {string.Join("", b_functionCode.ToString("X2"))}");
+            //Console.WriteLine($"StartAddress: {string.Join("", b_addressUpper.ToString("X2"), b_addressLower.ToString("X2"))}");
+            //Console.WriteLine($"datasize: {string.Join("", b_dataSizeUpper.ToString("X2"), b_dataSizeLower.ToString("X2"))}");
+            //Console.WriteLine($"b_outputCount: {b_outputCount}");
             List<byte> b_requestMessage = new List<byte> {
                 b_stationNumber,
                 b_functionCode,

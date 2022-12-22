@@ -35,7 +35,7 @@ namespace LSPLC
                 for(int i = 0; i < _message.Length-1; i += 2)
                 {
                     var label = $"{_startVariablePrefix}{_startVariableIndex+(i/2)}"; //// construct the variable name
-                    output[label] = (_message[i] << 8) + _message[i+1]; //// take the value from byte array
+                    output[label] = (_message[i] << 8) + _message[i]; //// take the value from byte array
 
                 }
                 return JsonConvert.SerializeObject(output);
@@ -147,24 +147,28 @@ namespace LSPLC
             //// client list
             Clients = new List<Socket> ();
             ///// PLC connection
-            PLCDevice device = new PLCDevice("COM8", 9600);
+            PLCDevice device = new PLCDevice("COM4", 9600);
             ///// add client thread.
             Task addClientWorker = Task.Run(() => AddClient());
-            int stationNumber = 1;
-            var a = 10;
+            int stationNumber = 3;
+            var a = 0;
 
             /// main loop
             while (true)
             {
-                if (a > 50000) { a = 10; }
+                if (a ==0) { a = 1; }else
+                {
+                    a = 0;
+                }
                 //// listen to client.
                 if (!device.IsDisposed)
                 {
-                    var startVariable = "D00014";
+                    var startVariable = "K00000";
                     int idx = int.Parse(startVariable.Substring(1));
                     string prefix = startVariable.Substring(0, 1);
                     int read_functionCode = 1; //// 1~4, but we use 3, 4 (read word) only.
                     int write_functionCode = 5; /// 5,6,15,16 but we use 15 (write bit, on Kxxxx address) and 16 (write word on Dxxxx address) only
+
                     switch (prefix)
                     {
                         case "D":
@@ -172,54 +176,60 @@ namespace LSPLC
                             write_functionCode = 16;
                             break;
                         case "K":
-                            read_functionCode= 4;
+                            read_functionCode= 2;
                             write_functionCode = 15;
                             break;
                         default: break;
                     }
                     try
                     {
-                        byte[] b = device.ReadRequest(stationNumber: stationNumber, startVariable: startVariable, readCount: 96, functionCode: read_functionCode);
-                        //for (int i = 0; i < b.Length - 1; i += 2)
-                        //{
-                        //    Console.Write($"{b[i].ToString("X2")}{b[i + 1].ToString("X2")}-");
-                        //}
-                        a++;
-                        Console.WriteLine($"read length: {b.Length}");
-                        //// send TCP stream to agentC
-                        SendMessage(message: b, startVariablePrefix: prefix, startVariableIndex: idx);
-                    }
-                    catch (Exception e)
-                    {
-                        SendTextMessage($"Read Failed, Error: {e.Message}");
-                    }
-                    List<int> values = new List<int> { 
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a,
-                                                        a+9, a, a+1, a, a + 1, a, a + 1, a
+                        List<int> values = new List<int> {
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,
+                                                        a, a, a, a, a, a, a, a,a,a,a,
+                                                        a, a, a, a, a, a, a, a
                                                     };
-                    //List<int> values = new List<int> { a+1};
-                    //List<int> values = new List<int> {01,01,00,00,00,00,00,00};
-                    try
-                    {
-                        device.WriteRequest(values, stationNumber: stationNumber, startVariable: startVariable, outputCount: 96, functionCode: write_functionCode);
+                        device.WriteRequest(values, stationNumber: stationNumber, startVariable: startVariable, outputCount: 96+27, functionCode: write_functionCode);
                         SendTextMessage("Write Successed!");
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine(e.StackTrace);
                         SendTextMessage($"Write Failed, Error: {e.Message}");
                     }
+
+
+                    try
+                    {
+                        Console.WriteLine($"read_functionCode: {read_functionCode}");
+                        byte[] b = device.ReadRequest(stationNumber: stationNumber, startVariable: startVariable, readCount: 16, functionCode: read_functionCode);
+
+                        // send TCP stream to agentC
+                        SendMessage(message: b, startVariablePrefix: prefix, startVariableIndex: idx);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.StackTrace);
+                        SendTextMessage($"Read Failed, Error: {e.Message}");
+                    }
+
+                    //List<int> values = new List<int> { a};
+                    //List<int> values = new List<int> {01,01,00,00,00,00,00,00};
+
+
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(5000);
             }
         }
     }
