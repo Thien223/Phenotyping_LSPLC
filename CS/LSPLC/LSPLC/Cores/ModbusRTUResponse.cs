@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace LSPLC.Cores
 {
     public class ModbusRTUResponse
     {
-        public int stationNumber;
-        //public int functionCode;
-        //public string startVariable;
-        //public int dataSize;
-        public string data;
+        public string result;
+        public string message;
+        public Dictionary<string, int> cur_value;
     }
 }

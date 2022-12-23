@@ -1,4 +1,9 @@
-﻿using System;
+﻿using LSPLC.Cores;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using sam;
+using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +14,11 @@ namespace TCPClient
     {
 
         static TcpClient me = null;
-        static readonly string serverIP = "1.214.32.67";
+        static readonly string serverIP = "222.105.187.75";
         static readonly int serverPort = 3395;
 
         public static int SendHeartBeatCount { get; set; }
-        public static bool IsConnected=false;
+        public static bool IsConnected = false;
         static string Data;
         /// <summary>
         /// read bytes from tcp stream
@@ -108,7 +113,20 @@ namespace TCPClient
             }
         }
 
+        private static void SendMessage(TcpClient client, string message)
+        {
+            try
+            {
+                byte[] stream = Encoding.ASCII.GetBytes(message);
+                client.GetStream().Write(stream, 0, stream.Length);
+                Console.WriteLine($"Sent message to server: *** {message} ***");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Send message failed: {ex.StackTrace}");
+            }
 
+        }
         private static void CreateClient()
         {
             try
@@ -137,19 +155,76 @@ namespace TCPClient
         }
         static void Main(string[] args)
         {
+            bool read = true;
             while (true)
             {
+                read = !read;
                 DateTime lastHeartBeatTime = DateTime.Now;
+                ModbusRTURequest obj_request;
+
+                //var json = new JObject
+                //{
+                //    { "command", "read" },
+                //    { "plc_no", 1 }
+                //};
+                if (!read)
+                {
+                    Dictionary<string, int> run_stop = new Dictionary<string, int>();
+                    for (int i = 0; i < 18; i++)
+                    {
+                        run_stop[$"K{i}"] = i%2;
+                    }
+
+
+                    Dictionary<string, int> start_end = new Dictionary<string, int>();
+                    for (int i = 14; i < 110; i++)
+                    {
+                        start_end[$"D{i}"] = 14;
+                    }
+
+                    Dictionary<string, int> set_value = new Dictionary<string, int>();
+                    for (int i = 111; i < 207; i++)
+                    {
+                        set_value[$"D{i}"] = 1111;
+                    }
+
+                    obj_request = new ModbusRTURequest
+                    {
+                        command = "write",
+                        plc_no = 1,
+                        run_stop = run_stop,
+                        start_end = start_end,
+                        set_value = set_value
+                    };
+                    
+                }
+                else
+                {
+                    obj_request = new ModbusRTURequest
+                    {
+                        command = "read",
+                        plc_no = 1
+                    };
+                }
+
+
+                var json = JsonConvert.SerializeObject(obj_request).Replace(Environment.NewLine, "");
 
                 if (me == null)
                 {
                     CreateClient();
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(10000);
                     continue;
                 }
+                SendMessage(me, $"{json}\n");
+                Console.WriteLine($"Request: '{json}'");
+
+
+
                 CheckRead();
-                Console.WriteLine(Data);
+                Console.WriteLine($"Response: '{Data}'");
                 Console.WriteLine("\n\n");
+
                 if ((DateTime.Now - lastHeartBeatTime).TotalSeconds > 60 && me != null)
                 {
                     var sent = SendHeartBeat(me);
@@ -159,7 +234,7 @@ namespace TCPClient
                     }
                 } // end if
 
-                System.Threading.Thread.Sleep(10);
+                System.Threading.Thread.Sleep(10000);
             }
         }
     }
