@@ -309,7 +309,6 @@ namespace LSPLC.Cores
                     break;
                 case 2: //// Read bit 
                     validResponseNumberOfBytes = (int)Math.Ceiling(readCount / 8.0);
-                    Console.Write($"{validResponseNumberOfBytes} ");
                     //validResponseNumberOfBytes = readCount;
                     break;
                 case 3: //// Read word
@@ -332,7 +331,6 @@ namespace LSPLC.Cores
             byte b_addressLower = Convert.ToByte(dec_adressLower);
             byte b_dataSizeUpper = Convert.ToByte(readCount>>8);
             byte b_dataSizeLower = Convert.ToByte(readCount&0xFF);
-            Console.WriteLine("b_functionCode: {0:X2}", b_functionCode);
             List<byte> b_requestMessage = new List<byte> {
                 b_stationNumber,
                 b_functionCode,
@@ -349,35 +347,35 @@ namespace LSPLC.Cores
             b_requestMessage.Add(b_crcLower);
             b_requestMessage.Add(b_crcUpper);
 
-            Console.WriteLine("Final Read request:");
-            for (int i = 0; i < b_requestMessage.Count; i += 1)
-            {
-                Console.Write($"{b_requestMessage[i].ToString("X2")} ");
-            }
-            Console.WriteLine("");
+            //Console.WriteLine("Final Read request:");
+            //for (int i = 0; i < b_requestMessage.Count; i += 1)
+            //{
+            //    Console.Write($"{b_requestMessage[i].ToString("X2")} ");
+            //}
+            //Console.WriteLine("");
             //// send request to plc
             Write(b_requestMessage.ToArray());
 
             //// take the response
             bool stop = false;
 
-            Console.WriteLine("Final Read Response:");
+            //Console.WriteLine("Final Read Response:");
             while (!stop)
             {
                 buffers.Clear();
                 byte res_stationNumber = ReadOne(); /// station code
-                Console.Write($"{res_stationNumber.ToString("X2")} ");
+                //Console.Write($"{res_stationNumber.ToString("X2")} ");
                 if (res_stationNumber == stationNumber)
                 {
                     byte res_functionCode = ReadOne();
-                    Console.Write($"{res_functionCode.ToString("X2")} ");
+                    //Console.Write($"{res_functionCode.ToString("X2")} ");
                     if (res_functionCode == 1 || res_functionCode == 2 || res_functionCode == 3 || res_functionCode == 4)
                     {
                         var res_numberOfBytes = ReadOne();
-                        Console.Write($"{res_numberOfBytes.ToString("X2")} ");
+                        //Console.Write($"{res_numberOfBytes.ToString("X2")} ");
                         if (res_numberOfBytes == validResponseNumberOfBytes)
                         {
-                            Console.Write($"Valid ");
+                            //Console.Write($"Valid ");
                             //bool error = false;
                             //while (!error)
                             //{
@@ -393,10 +391,10 @@ namespace LSPLC.Cores
                             //}
                             //return new byte[] { 0 };
                             data = ReadMany((uint)validResponseNumberOfBytes, 2000).ToArray();
-                            for (int i = 0; i < data.Count(); i += 1)
-                            {
-                                Console.Write($"{data[i].ToString("X2")} ");
-                            }
+                            //for (int i = 0; i < data.Count(); i += 1)
+                            //{
+                            //    Console.Write($"{data[i].ToString("X2")} ");
+                            //}
                             var res_crcUpper = ReadOne();
                             var res_crcLower = ReadOne();
                             buffers.Add(res_stationNumber);
@@ -415,13 +413,12 @@ namespace LSPLC.Cores
                         }
                         else
                         {
-
                             Console.Write($"Invalid Valid {validResponseNumberOfBytes}");
                         }
                     }
                     else if (res_functionCode == 84 || functionCode == 82)
                     {
-                        log.Write("ERROR ....");
+                        log.Write($"ERROR, response function code: {res_functionCode} ....");
                     }
                     stop = true;
                 }
@@ -551,12 +548,12 @@ namespace LSPLC.Cores
             //// ADD CRC to request
             b_requestMessage.Add(b_crcLower);
             b_requestMessage.Add(b_crcUpper);
-            Console.WriteLine("Final Write request:");
-            for (int i = 0; i < b_requestMessage.Count; i += 1)
-            {
-                Console.Write($"{b_requestMessage[i].ToString("X2")} ");
-            }
-            Console.WriteLine("");
+            //Console.WriteLine("Final Write request:");
+            //for (int i = 0; i < b_requestMessage.Count; i += 1)
+            //{
+            //    Console.Write($"{b_requestMessage[i].ToString("X2")} ");
+            //}
+            //Console.WriteLine("");
             /// request
             Write(b_requestMessage.ToArray());
             /// get and process response
