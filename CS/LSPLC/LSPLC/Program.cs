@@ -39,17 +39,22 @@ namespace LSPLC
             byte[] b_data = Encoding.UTF8.GetBytes($"{data}\n");
             if (client == null)
             {
+                Clients.Remove(client);
+                log.Write($"{((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)client.RemoteEndPoint).Port.ToString()} Disconnected...");
                 log.Write($"Client is null..");
                 return;
             }
             try
             {
                 client.Send(b_data);
-                log.Write($"Response to {((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}: {data}");
+                log.Write($"Response to {((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)client.RemoteEndPoint).Port.ToString()} - {data}");
             }
             catch (Exception e)
             {
-                log.Write($"now: {e.Message}\n{e.StackTrace}");
+
+                Clients.Remove(client);
+                log.Write($"{((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)client.RemoteEndPoint).Port.ToString()} Disconnected...");
+                //log.Write($"now: {e.Message}\n{e.StackTrace}");
                 return;
             }
         }
@@ -90,10 +95,10 @@ namespace LSPLC
                     log.Write($"Clients list: ");
                     foreach (var c in Clients)
                     {
-                        log.Write($"{((IPEndPoint)c.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)c.RemoteEndPoint).Port.ToString()}");
+                        log.Write($"\t{((IPEndPoint)c.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)c.RemoteEndPoint).Port.ToString()}");
                     }
                 }
-                Thread.Sleep(5000);
+                Delay(500);
             }
         }
 
@@ -127,14 +132,17 @@ namespace LSPLC
                         ModbusRTURequest obj_request = JsonConvert.DeserializeObject<ModbusRTURequest>(str_request);
                         obj_request.client = client;
                         lst_requests.Add(obj_request);
+                        log.Write($"Request from {((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)client.RemoteEndPoint).Port.ToString()} - {str_request}");
                     }
                 }
                 catch{
-
                     toRemove.Add(i);
                 }
             }
-            foreach (int rm in toRemove) { 
+
+            foreach (int rm in toRemove)
+            {
+                log.Write($"{((IPEndPoint)Clients[rm].RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)Clients[rm].RemoteEndPoint).Port.ToString()} Disconnected...");
                 Clients.RemoveAt(rm);
             }
             return lst_requests;
@@ -245,7 +253,7 @@ namespace LSPLC
 
             }catch(Exception e)
             {
-                log.Write($"{e.Message}\n{e.StackTrace}");
+                //log.Write($"{e.Message}\n{e.StackTrace}");
                 obj_response.result = "error";
                 obj_response.message = e.Message;
             }
@@ -339,7 +347,10 @@ namespace LSPLC
             /// main loop
             while (true)
             {
-                log.Write($"running..");
+                if (!Clients.Any())
+                {
+                    log.Write($"Waiting for clients...");
+                }
                 ///// auto detect and connect to PLCs 
                 if (device==null || device.Device == null)
                 {
@@ -354,32 +365,49 @@ namespace LSPLC
                 }
                 /// listen to client request
                 /// 
+
                 List<ModbusRTURequest> lst_requests = ListenRequests();
+
                 /// if there is any request
-                if (lst_requests.Count > 0)
+                if (lst_requests.Any())
                 {
                     foreach (ModbusRTURequest obj_request in lst_requests)
                     {
                         /// we cannot serialize Socket object --> set null to serializing latter. backup it into client object.
                         Socket client = obj_request.client;
-                        obj_request.client = null; 
-
+                        obj_request.client = null;
                         if (!device.IsDisposed)
                         {
+
                             ModbusRTUResponse obj_response = new ModbusRTUResponse();
                             if (obj_request.command.Equals("read")) //// read (word) current value (D600 ~ D606)
                             {
-                                obj_response = ReadCurrentValue(obj_request, device, ref obj_response);
+                                try
+                                {
+                                    obj_response = ReadCurrentValue(obj_request, device, ref obj_response);
+                                }catch (Exception e)
+                                {
+                                    obj_response.result = "error";
+                                    obj_response.message = $"{e.Message}";
+                                }
                             }
                             else if (obj_request.command.Equals("write"))
                             {
-                                obj_response = Write(obj_request, device, type: "run_stop", ref obj_response);
-                                obj_response = Write(obj_request, device, type: "start_end", ref obj_response);
-                                obj_response = Write(obj_request, device, type: "set_value", ref obj_response);
+                                try
+                                {
+                                    obj_response = Write(obj_request, device, type: "run_stop", ref obj_response);
+                                    obj_response = Write(obj_request, device, type: "start_end", ref obj_response);
+                                    obj_response = Write(obj_request, device, type: "set_value", ref obj_response);
+                                }
+                                catch (Exception e)
+                                {
+                                    obj_response.result = "error";
+                                    obj_response.message = $"{e.Message}";
+                                }
                             }
                             else
                             {
-                                log.Write($"Invalid request from AgentC. Request: '{JsonConvert.SerializeObject(obj_request)}'");
+                                //log.Write($"Invalid request from AgentC. Request: '{JsonConvert.SerializeObject(obj_request)}'");
 
                                 obj_response.result = "error";
                                 obj_response.message = $"Invalid request from AgentC. Request: '{JsonConvert.SerializeObject(obj_request)}'";

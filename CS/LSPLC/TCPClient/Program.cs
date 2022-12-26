@@ -108,7 +108,7 @@ namespace TCPClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"error {ex.Message}\n{ex.StackTrace}....");
+                Console.WriteLine($"error: {ex.Message}...");
                 return false;
             }
         }
@@ -119,7 +119,7 @@ namespace TCPClient
             {
                 byte[] stream = Encoding.UTF8.GetBytes(message);
                 client.GetStream().Write(stream, 0, stream.Length);
-                Console.WriteLine($"Sent message to server: *** {message} ***");
+                //Console.WriteLine($"Sent message to server: *** {message} ***");
             }
             catch (Exception ex)
             {
@@ -156,6 +156,7 @@ namespace TCPClient
         static void Main(string[] args)
         {
             bool read = true;
+            var plc_no = 5;
             while (true)
             {
                 read = !read;
@@ -191,7 +192,7 @@ namespace TCPClient
                     obj_request = new ModbusRTURequest
                     {
                         command = "write",
-                        plc_no = 1,
+                        plc_no = plc_no,
                         run_stop = run_stop,
                         start_end = start_end,
                         set_value = set_value
@@ -203,7 +204,7 @@ namespace TCPClient
                     obj_request = new ModbusRTURequest
                     {
                         command = "read",
-                        plc_no = 1
+                        plc_no = plc_no
                     };
                 }
 

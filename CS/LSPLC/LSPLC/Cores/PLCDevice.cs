@@ -186,8 +186,8 @@ namespace LSPLC.Cores
                 }
                 catch (Exception ex)
                 {
-                    Close();
-                    throw ex;
+                    log.Write($"Error while writing to PLC: {ex.Message}");
+                    //Close();
                 }
             }
         }
@@ -212,8 +212,8 @@ namespace LSPLC.Cores
                 }
                 catch (Exception ex)
                 {
-                    Close();
-                    throw ex;
+                    log.Write($"Error while writing to PLC: {ex.Message}");
+                    //Close();
                 }
             }
         }
@@ -231,10 +231,11 @@ namespace LSPLC.Cores
                 {
                     byte a = GetByte(timeout).Value;
                     return a;
-                }catch (Exception ex) {
-                    Console.WriteLine(ex.StackTrace);
+                }catch (Exception ex)
+                {
+                    //log.Write($"Error while reading from PLC: {ex.Message}\n{ex.StackTrace}");
+                    //log.Write($"Error while reading from PLC: {ex.Message}");
                     return 0;
-                    
                 }
             }
         }
@@ -364,6 +365,11 @@ namespace LSPLC.Cores
             {
                 buffers.Clear();
                 byte res_stationNumber = ReadOne(); /// station code
+                if(res_stationNumber == 0)
+                {
+                    //log.Write($"Error while request to PLC, check the request message...");
+                    throw new Exception($"Error while sending request to PLC, check the request message...");
+                }
                 //Console.Write($"{res_stationNumber.ToString("X2")} ");
                 if (res_stationNumber == stationNumber)
                 {
@@ -413,7 +419,7 @@ namespace LSPLC.Cores
                         }
                         else
                         {
-                            Console.Write($"Invalid Valid {validResponseNumberOfBytes}");
+                            log.Write($"Invalid Valid {validResponseNumberOfBytes}");
                         }
                     }
                     else if (res_functionCode == 84 || functionCode == 82)
@@ -531,7 +537,6 @@ namespace LSPLC.Cores
                 {
                     //// binary string (예: 01111000)
                     string str_temp = Utils.ReverseString(str_values.Substring(offset, 8));
-                    log.Write(str_temp);
                     offset += 8;
                     //// convert to byte
                     byte b_temp = Convert.ToByte(Convert.ToInt32(str_temp,fromBase:2));
@@ -562,6 +567,13 @@ namespace LSPLC.Cores
             {
                 buffers.Clear();
                 byte res_stationNumber = ReadOne(); /// station code
+
+                if (res_stationNumber == 0)
+                {
+                    //log.Write($"Error while request to PLC, check the request message...");
+                    throw new Exception($"Error while sending request to PLC, check the request message...");
+                }
+
                 if (res_stationNumber == stationNumber)
                 {
                     byte res_functionCode = ReadOne();
@@ -589,7 +601,8 @@ namespace LSPLC.Cores
 
                                 if ((temp_crc >> 8) == res_crcLower && ((temp_crc & 0xFF) == res_crcUpper))
                                 {
-                                    log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
+                                    /// write success.
+                                    //log.Write($"Final response: '{string.Join(" ", buffers.ToArray())}'");
                                 }
                             }
                         }
