@@ -84,7 +84,7 @@ namespace TCPClient
                     }
                     //var newStream = new byte[len];
                     Array.Resize(ref stream, len);
-                    Data = Encoding.ASCII.GetString(stream);
+                    Data = Encoding.UTF8.GetString(stream);
                 }
                 Task.Delay(50);
             } // end if
@@ -117,7 +117,7 @@ namespace TCPClient
         {
             try
             {
-                byte[] stream = Encoding.ASCII.GetBytes(message);
+                byte[] stream = Encoding.UTF8.GetBytes(message);
                 client.GetStream().Write(stream, 0, stream.Length);
                 Console.WriteLine($"Sent message to server: *** {message} ***");
             }

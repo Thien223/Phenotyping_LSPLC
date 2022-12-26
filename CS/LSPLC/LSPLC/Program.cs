@@ -36,12 +36,16 @@ namespace LSPLC
             //// Parsing output byte array to json, with format {variableName:value, ...}
             string data = JsonConvert.SerializeObject(obj_response);
             //// convert strign to byte stream and send over TCP
-            byte[] b_data = Encoding.UTF8.GetBytes(data);
-            if (client == null) return;
+            byte[] b_data = Encoding.UTF8.GetBytes($"{data}\n");
+            if (client == null)
+            {
+                log.Write($"Client is null..");
+                return;
+            }
             try
             {
                 client.Send(b_data);
-                log.Write($"*** {data} ***");
+                log.Write($"Response to {((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()}: {data}");
             }
             catch (Exception e)
             {
@@ -49,76 +53,7 @@ namespace LSPLC
                 return;
             }
         }
-        //private static void SendMessage(byte[] message, string startVariablePrefix = "D", int startVariableIndex = 0)
-        //{
-        //    if (Clients == null || Clients.Count <= 0)
-        //    {
-        //        Console.WriteLine("empty clients");
-        //        return;
-        //    }
-
-        //    string ParseResponse(byte[] _message, string _startVariablePrefix = "D", int _startVariableIndex = 0)
-        //    {
-        //        Dictionary<string, int> output = new Dictionary<string, int>();
-        //        for (int i = 0; i < _message.Length - 1; i += 2)
-        //        {
-        //            var label = $"{_startVariablePrefix}{_startVariableIndex + (i / 2)}"; //// construct the variable name
-        //            output[label] = (_message[i] << 8) + _message[i]; //// take the value from byte array
-
-        //        }
-        //        return JsonConvert.SerializeObject(output);
-        //    }
-
-        //    //// Parsing output byte array to json, with format {variableName:value, ...}
-        //    string data = ParseResponse(message, startVariablePrefix, startVariableIndex);
-        //    //// convert strign to byte stream and send over TCP
-        //    byte[] b_data = Encoding.ASCII.GetBytes(data);
-        //    for (int i = 0; i < Clients.Count; i++)
-        //    {
-        //        var client = Clients[i];
-        //        if (client == null) continue;
-        //        try
-        //        {
-        //            client.Send(b_data);
-        //            Console.WriteLine($"*** {data} ***");
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            Console.WriteLine($"now: {e.Message}\n{e.StackTrace}");
-        //            Clients.RemoveAt(i);
-        //            return;
-        //        }
-        //    }
-        //}
-
-
-        /// <summary>
-        ///  send message to TCP clients
-        /// </summary>
-        /// <param name="data"></param>
-        private static void SendTextMessage(string data)
-        {
-            //// convert strign to byte stream and send over TCP
-            byte[] b_data = Encoding.ASCII.GetBytes(data);
-            for (int i = 0; i < Clients.Count; i++)
-            {
-                var client = Clients[i];
-                if (client == null) continue;
-                try
-                {
-                    client.Send(b_data);
-                    Console.WriteLine($"*** {data} ***");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"now: {e.Message}\n{e.StackTrace}");
-                    Clients.RemoveAt(i);
-                    return;
-                }
-            }
-        }
-
-
+       
 
         /// <summary>
         /// wait for a while (different from Thread.Sleep())
@@ -151,6 +86,12 @@ namespace LSPLC
                 if (!Clients.Contains(client))
                 {
                     Clients.Add(client);
+                    log.Write($"{((IPEndPoint)client.RemoteEndPoint).Address.MapToIPv4().ToString()} Connected, Clients count: {Clients.Count}");
+                    log.Write($"Clients list: ");
+                    foreach (var c in Clients)
+                    {
+                        log.Write($"{((IPEndPoint)c.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)c.RemoteEndPoint).Port.ToString()}");
+                    }
                 }
                 Thread.Sleep(5000);
             }
@@ -168,10 +109,15 @@ namespace LSPLC
             List<ModbusRTURequest> lst_requests = new List<ModbusRTURequest>();
             //// loop over each client, take request string from tcp stream, parsing to modbusRTURequest object
             //// set object client as current client, and add to return list.
+            List<int> toRemove = new List<int> ();
             for (int i = 0; i < Clients.Count; i++)
             {
                 var client = Clients[i];
-                if (client == null) continue;
+                if (client == null)
+                {
+                    toRemove.Add(i);
+                    continue;
+                }
                 try
                 {
                     using (StreamReader stream = new StreamReader(new NetworkStream(client)))
@@ -184,8 +130,12 @@ namespace LSPLC
                     }
                 }
                 catch{
-                    log.Write("Waiting for request from client...");
+
+                    toRemove.Add(i);
                 }
+            }
+            foreach (int rm in toRemove) { 
+                Clients.RemoveAt(rm);
             }
             return lst_requests;
         }
@@ -281,11 +231,11 @@ namespace LSPLC
             
             try
             {
-                log.Write($"stationNumber: {stationNumber}");
-                log.Write($"startVariable: {startVariable}");
-                log.Write($"values.Count: {values.Count}");
-                log.Write($"functioncode: {functioncode}");
-                log.Write($"device: {device.Device.IsOpen}");
+                //log.Write($"stationNumber: {stationNumber}");
+                //log.Write($"startVariable: {startVariable}");
+                //log.Write($"values.Count: {values.Count}");
+                //log.Write($"functioncode: {functioncode}");
+                //log.Write($"device: {device.Device.IsOpen}");
                 device.WriteRequest(values,
                     stationNumber: stationNumber,
                     startVariable: startVariable,
@@ -389,9 +339,11 @@ namespace LSPLC
             /// main loop
             while (true)
             {
+                log.Write($"running..");
                 ///// auto detect and connect to PLCs 
-                if(device==null || device.Device == null)
+                if (device==null || device.Device == null)
                 {
+
                     try
                     {
                         device = new PLCDevice("COM4", 9600);
@@ -401,12 +353,17 @@ namespace LSPLC
                     }
                 }
                 /// listen to client request
+                /// 
                 List<ModbusRTURequest> lst_requests = ListenRequests();
                 /// if there is any request
                 if (lst_requests.Count > 0)
                 {
                     foreach (ModbusRTURequest obj_request in lst_requests)
                     {
+                        /// we cannot serialize Socket object --> set null to serializing latter. backup it into client object.
+                        Socket client = obj_request.client;
+                        obj_request.client = null; 
+
                         if (!device.IsDisposed)
                         {
                             ModbusRTUResponse obj_response = new ModbusRTUResponse();
@@ -428,68 +385,12 @@ namespace LSPLC
                                 obj_response.message = $"Invalid request from AgentC. Request: '{JsonConvert.SerializeObject(obj_request)}'";
 
                             }
-                            SendMessage(obj_response, obj_request.client);
+                            SendMessage(obj_response, client);
                         }
                     }
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(50);
 
-                //if (a == 0) { a = 1; }
-                //else
-                //{
-                //    a = 0;
-                //}
-                //// listen to client.
-                //if (!device.IsDisposed)
-                //{
-                //    int idx = int.Parse(startVariable.Substring(1));
-                //    string prefix = startVariable.Substring(0, 1);
-                //    int read_functionCode = 1; //// 1~4
-                //    int write_functionCode = 5; //// 5,6,15,16 but we use 15 (write bit, on Kxxxx address) and 16 (write word on Dxxxx address) only
-
-                //    switch (prefix)
-                //    {
-                //        case "D":
-                //            read_functionCode = 4;
-                //            write_functionCode = 16;
-                //            break;
-                //        case "K":
-                //            read_functionCode = 1;
-                //            write_functionCode = 15;
-                //            break;
-                //        default: break;
-                //    }
-                //    try
-                //    {
-                //        List<int> values = new List<int> {
-                //                                        a, a, a, a, a, a, a, a,
-                //                                        a, a*0, a, a, a, a, a, a,
-                //                                        a*0
-                //                                    };
-
-                //        device.WriteRequest(values, stationNumber: stationNumber, startVariable: startVariable, outputCount: values.Count, functionCode: write_functionCode);
-                //        SendTextMessage("Write Successed!");
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        Console.WriteLine(e.StackTrace);
-                //        SendTextMessage($"Write Failed, Error: {e.Message}");
-                //    }
-
-
-                //    try
-                //    {
-                //        byte[] b = device.ReadRequest(stationNumber: stationNumber, startVariable: startVariable, readCount: 17, functionCode: read_functionCode);
-                //        // send TCP stream to agentC
-                //        SendMessage(message: b, startVariablePrefix: prefix, startVariableIndex: idx);
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        Console.WriteLine(e.StackTrace);
-                //        SendTextMessage($"Read Failed, Error: {e.Message}");
-                //    }
-
-                //}
             }
         }
         #endregion Main Program
