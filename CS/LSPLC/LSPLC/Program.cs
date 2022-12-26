@@ -97,8 +97,8 @@ namespace LSPLC
                     {
                         log.Write($"\t{((IPEndPoint)c.RemoteEndPoint).Address.MapToIPv4().ToString()}:{((IPEndPoint)c.RemoteEndPoint).Port.ToString()}");
                     }
+                    Delay(5000);
                 }
-                Delay(500);
             }
         }
 
@@ -271,20 +271,21 @@ namespace LSPLC
             Dictionary<string, int> output = new Dictionary<string, int>();
             for (int i = 0; i < _message.Length - 1; i += 2)
             {
+               
                 ///// with current value data, take only odd index (D207, D209, D211, D213)
                 if (type.Equals("cur_value"))
                 {
                     if ((_startVariableIndex + (i / 2)) % 2 == 1)
                     {
                         var label = $"{_startVariablePrefix}{_startVariableIndex + (i / 2)}"; //// construct the variable name
-                        output[label] = (_message[i] << 8) + _message[i]; //// take the value from byte array
+                        output[label] = (_message[i] << 8) + _message[i + 1]; //// take the value from byte array
                     }
                 }
                 //// with other data, take all
                 else
                 {
                     var label = $"{_startVariablePrefix}{_startVariableIndex + (i / 2)}"; //// construct the variable name
-                    output[label] = (_message[i] << 8) + _message[i]; //// take the value from byte array
+                    output[label] = (_message[i] << 8) + _message[i + 1]; //// take the value from byte array
                 }
             }
             return output;

@@ -156,7 +156,7 @@ namespace TCPClient
         static void Main(string[] args)
         {
             bool read = true;
-            var plc_no = 5;
+            var plc_no = 4;
             while (true)
             {
                 read = !read;
