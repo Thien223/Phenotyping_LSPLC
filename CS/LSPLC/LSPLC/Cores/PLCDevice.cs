@@ -365,6 +365,7 @@ namespace LSPLC.Cores
             {
                 buffers.Clear();
                 byte res_stationNumber = ReadOne(); /// station code
+                Console.WriteLine($"response station number: {res_stationNumber}");
                 if(res_stationNumber == 0)
                 {
                     //log.Write($"Error while request to PLC, check the request message...");
