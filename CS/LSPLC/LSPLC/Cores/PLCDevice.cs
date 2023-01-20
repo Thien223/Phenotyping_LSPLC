@@ -223,7 +223,7 @@ namespace LSPLC.Cores
         /// </summary>
         /// <param name="timeout">제한시간(밀리초)</param>
         /// <returns>읽은 바이트</returns>
-        public byte ReadOne(int timeout = 2000)
+        public byte ReadOne(int timeout = 50)
         {
             lock (readLock)
             {
@@ -246,7 +246,7 @@ namespace LSPLC.Cores
         /// <param name="count">읽을 개수</param>
         /// <param name="timeout">제한시간(밀리초)</param>
         /// <returns>읽은 바이트 열거</returns>
-        public IEnumerable<byte> ReadMany(uint count, int timeout)
+        public IEnumerable<byte> ReadMany(uint count, int timeout=50)
         {
             lock (readLock)
             {
@@ -397,7 +397,7 @@ namespace LSPLC.Cores
                             //    }
                             //}
                             //return new byte[] { 0 };
-                            data = ReadMany((uint)validResponseNumberOfBytes, 2000).ToArray();
+                            data = ReadMany((uint)validResponseNumberOfBytes, 50).ToArray();
                             //for (int i = 0; i < data.Count(); i += 1)
                             //{
                             //    Console.Write($"{data[i].ToString("X2")} ");
@@ -429,10 +429,12 @@ namespace LSPLC.Cores
                     }
                     stop = true;
                 }
-                //else
-                //{
-                //    throw new Exception($"PLC returns invalid station number (<{res_stationNumber}>)");
-                //}
+                else
+                {
+                    stop = ClearRedundantBuffer();
+                    //log.Write($"Error while request to PLC, check the request message...");
+                    throw new Exception($"PLC responses invalid station number: expect {stationNumber}, received {res_stationNumber}...");
+                }
             }
             //log.Write($"buffers.Count: {buffers.Count}");
             //log.Write($"'{string.Join(" ", buffers.ToArray())}'");
@@ -571,7 +573,6 @@ namespace LSPLC.Cores
 
                 if (res_stationNumber == 0)
                 {
-                    //log.Write($"Error while request to PLC, check the request message...");
                     throw new Exception($"Error while sending request to PLC, check the request message...");
                 }
 
@@ -626,9 +627,35 @@ namespace LSPLC.Cores
                 else
                 {
                     buffers.Clear();
-                    break;
+                    stop = ClearRedundantBuffer();
+                    //log.Write($"Error while request to PLC, check the request message...");
+                    throw new Exception($"PLC responses invalid station number: expect {stationNumber}, received {res_stationNumber}...");
                 }
             }
+        }
+
+        /// <summary>
+        ///  clear buffer that is from old request (that was not response completely - the connection suddently broken, for example)
+        /// </summary>
+        /// <returns></returns>
+        private bool ClearRedundantBuffer()
+        {
+            bool stop = false;
+            int realiability = 0;
+            while (!stop)
+            {
+                byte temp = ReadOne();
+                if(temp == 0)
+                {
+                    realiability += 1;
+                }
+                if(realiability>=5) 
+                { 
+                    stop = true;
+                    break; 
+                }
+            }
+            return stop;
         }
     }
 }

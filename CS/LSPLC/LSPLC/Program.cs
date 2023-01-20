@@ -358,7 +358,7 @@ namespace LSPLC
 
                     try
                     {
-                        device = new PLCDevice("COM4", 9600);
+                        device = new PLCDevice("COM3", 9600);
                     }
                     catch (Exception e) {
                         log.Write($"Could not connect to PLC devices... Error: {e.Message}");
